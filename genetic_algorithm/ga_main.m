@@ -4,7 +4,7 @@ clc;
 
 %% Constant Parameters
 
-global g step z1_min z2_min z3_min z1_max z2_max z3_max y_max m Ixx l flips u1_max u2_max
+global g step z1_min z2_min z3_min z1_max z2_max z3_max y_min y_max m Ixx l flips u1_max u1_min u2_max u2_min
 
 % Drone parameters
 m =  27e-3 / 2; % mass
@@ -16,23 +16,26 @@ step = 0.01; % 100 Hz
 g = 9.81;    % m/s^2
 
 % Bounds on the z trajectory of the reaching phase
-z1_min = 2.5;
-z1_max = 3.5;
+z1_min = 2;
+z1_max = 2.5;
 
 % Bounds on the z trajectory of the flipping phase
 z2_min = 1;
-z2_max = 3.5;
+z2_max = 2.5;
 
 % Bounds on the z trajectory of the recovery phase
 z3_min = 1;
-z3_max = 2;
+z3_max = 2.5;
 
 % Bound on y
-y_max = 2;
+y_min = 0;
+y_max = 3;
 
 % Maximum thrust and torque reachable by the drone
 u1_max = 0.9 * ( ( 57e-3 * g ) / 2 ); % Maximum thrust 
+u1_min = 0;                           % Minimum thrust
 u2_max = 0.1 * ( 1 / 2 * u1_max * l); % Maximum torque
+u2_min = -u2_max;                     % Minimum torque
 
 % Number of flips to be perfomed by the drone
 flips  = 1;
@@ -74,52 +77,67 @@ nonlcon = @NL_bounds;
 fun = @objective_function;
 
 %% Solving the optimization problem using genetic algorithm
-rng(230)
-options = optimoptions('ga','ConstraintTolerance',1e-20,'PlotFcn', @gaplotbestf, ...
-                       'Display','iter');
-% x = ga(fun,9, [], [], [], [], lb, ub, nonlcon, options)
-[x,fval,exitflag,output,population,scores] = ga(fun,9,[],[],[],[],lb,ub,nonlcon,options);
+rng default
 
-z_hover1    = x(1);
-z_start     = x(2);
-z_end       = x(3);
-z_hover2    = x(4);
-phi_start   = x(5);
-phi_end     = x(6);
-t1          = x(7);
-t2          = x(8);
-t3          = x(9);
+nvars = 9;
+PopulationSize_Data = 200;
+CrossoverFraction_Data = 0.7;
+MaxStallGenerations_Data = 50;
+
+H = zeros(50,10);
+J = {};
+
+for i=1:50
+    [x,fval,exitflag,output,population,score] = ga_solver_code(nvars,lb,ub,PopulationSize_Data,CrossoverFraction_Data,MaxStallGenerations_Data);
+    H(i,1:9)=x;
+    H(i,10)=fval;
+    
+    z_hover1    = x(1);
+    z_start     = x(2);
+    z_end       = x(3);
+    z_hover2    = x(4);
+    phi_start   = x(5);
+    phi_end     = x(6);
+    t1          = x(7);
+    t2          = x(8);
+    t3          = x(9);
+    
+    build_trajectory
+    visualize_trajectory;
+end
+H
+
+% options = optimoptions('ga','ConstraintTolerance',1e-20, ...
+%                        'PlotFcn', @gaplotbestf, ...
+%                        'Display','iter');
+% [x,fval,exitflag,output,population,scores] = ga(fun,9,[],[],[],[],lb,ub,nonlcon,options);
+
+% z_hover1    = x(1);
+% z_start     = x(2);
+% z_end       = x(3);
+% z_hover2    = x(4);
+% phi_start   = x(5);
+% phi_end     = x(6);
+% t1          = x(7);
+% t2          = x(8);
+% t3          = x(9);
 
 %% Building and plotting the trajectory
 build_trajectory;
 visualize_results;
 
-%% Trajectory plot
-figure
-plot(y1,z1(1,:),'LineWidth',1.5,'Color','b'),
-hold on, plot(y2,z2(1,:),'LineWidth',1.5,'Color','r'),
-hold on, plot(y3,z3(1,:),'LineWidth',1.5,'Color','y'),
-hold on, plot(0,z_hover1,'*g'), hold on, plot(y1(length(y1)),z_start,'*g'),
-hold on, plot(y2(length(y2)),z_end,'*g'),
-hold on, plot(y3(length(y3)),z_hover2,'*g'),
-for i = 1:10:length(y)
-    
-   t = phi(i);
-   
-   q1 = y(i)-l*cos(t);
-   q2 = y(i)+l*cos(t);
-   w1 = z(i)-l*sin(t);
-   w2 = z(i)+l*sin(t);
-   
-   r1y = q1+r*cos(t+pi/2);
-   r1z = w1+r*sin(t+pi/2);
-   r2y = q2+r*cos(t+pi/2);
-   r2z = w2+r*sin(t+pi/2);
 
-   plot([q1 q2],[w1 w2],'k','LineWidth',1.5), hold on
-   plot([q1 r1y],[w1 r1z],'k','LineWidth',1.5), hold on
-   plot([q2 r2y],[w2 r2z],'k','LineWidth',1.5), hold on
-   
-end
-title('Planar flipping trajectory'), daspect([1 1 1]), grid;
+%% Write trajectory to file
 
+py = y';
+pz = z';
+roll = phi';
+vy = yd';
+vz = zd';
+rolld = phid';
+
+cref_X = [py pz roll vy vz rolld];
+ref_U = [u1' u2'];
+%% 
+dlmwrite('saved_data/traj_ref.csv',ref_X);
+dlmwrite('saved_data/input_ref.csv',ref_U);

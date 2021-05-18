@@ -2,7 +2,7 @@ function [c,ceq] = NL_bounds(x)
 %NL_BOUNDS extracts the nonlinear bounds that will be used in the
 %optimization problem.
 
-    global g step z1_min z2_min z3_min z1_max z2_max z3_max y_max m Ixx flips u1_max u2_max
+    global g step z1_min z2_min z3_min z1_max z2_max z3_max y_min y_max m Ixx l flips u1_max u1_min u2_max u2_min
 
     ceq = []; % no equality constraints
     
@@ -81,13 +81,13 @@ function [c,ceq] = NL_bounds(x)
            -min(z2(1,:))+z2_min;    % lower bound on the flipping phase
             max(z3(1,:))-z3_max;    % upper bound on the recovery phase
            -min(z3(1,:))+z3_min;    % lower bound on the recovery phase
-            min(y);                 % lower bound on the y trajectory
-            max(y) - y_max;         % upper bound on the y trajectory
-           -min(u1);                % lower bound on u1 (u1>=0)
+           % -min(y) + y_min;       % lower bound on the y trajectory
+           %  max(y) - y_max;       % upper bound on the y trajectory
+           -min(u1)+u1_min;       % lower bound on u1 (u1>=0)
             max(u1)-u1_max;         % upper bound on u1 (u1<=u1 max)
-           -u2_max-min(u2);         % lower bound on u2 (u2>=-u2_max)
+           -min(u2)+u2_min;         % lower bound on u2 (u2>=-u2_max)
             max(u2)-u2_max;         % upper bound on u2 (u2<=u2_max)
-            -min(phi);              % lower bound on phi
+           -min(phi);               % lower bound on phi
             max(phi)-2*pi;          % upper bound on phi
            -4*pi-min(phid);         % lower bound on thetad (thetad >= thetad_min) (angular velocity for aggressive maneuvers is around 720 deg/s)
             max(phid)-4*pi];        % upper bound on thetad (thetad <= thetad_max) (angular velocity for aggressive maneuvers is around 720 deg/s)

@@ -1,0 +1,22 @@
+function [YY1 YY2] = selection(P,F,p)
+% P - population, F - fitness value, p - population size
+[x y] = size(P);
+Y1 = zeros(p,y);
+F = F + 10; % adding 10 to ensure no chromosome has negative fitness
+
+% elite selection
+e=3;
+
+for i = 1:e
+    [r1 c1] = find(F==max(F));
+    Y1(i,:) = P(max(c1),:);
+    P(max(c1),:)=[];
+    Fn(i)=F(max(c1));
+    F(:,max(c1))=[];
+end
+
+D = F / sum(F); % Determine selection probability
+E = cumsum(D);  % Determine cumulative probability
+N = 
+
+end
