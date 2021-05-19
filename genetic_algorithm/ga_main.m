@@ -95,9 +95,9 @@ J = {};
 
 for i=1:iter
     [x,fval,exitflag,output] = ga_solver_code(nvars,lb,ub,PopulationSize_Data,CrossoverFraction_Data,MaxStallGenerations_Data);
-    H(i,1:9)=x;
-    H(i,10)=fval;
-    J{i} = output.message
+    H(i,1:9)=x;             % storing the solution
+    H(i,10)=fval;           % storing the function value
+    J{i} = output.message   % storing the output message
     
     z_hover1    = x(1);
     z_start     = x(2);
@@ -109,7 +109,7 @@ for i=1:iter
     t2          = x(8);
     t3          = x(9);
     
-    build_trajectory
+    build_trajectory;
     visualize_trajectory;
 end
 
