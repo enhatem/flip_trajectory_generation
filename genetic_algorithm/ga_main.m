@@ -87,6 +87,7 @@ PopulationSize_Data = 200;
 CrossoverFraction_Data = 0.7;
 MaxStallGenerations_Data = 50;
 
+% number of time the ga solver will run
 iter = 1;
 
 % Variables to store the solutions and output message
