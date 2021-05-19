@@ -69,12 +69,10 @@ function [c,ceq] = NL_bounds(x)
     y = integrate(yd,0);
 
     % Input
-
     u1 = m*(zdd+gravity)./cos(phi);
     u2 = Ixx*phidd;
     
     % Bounds 
-    
     c = [   max(z1(1,:))-z1_max;    % upper bound on the reaching phase
            -min(z1(1,:))+z1_min;    % lower bound on the reaching phase
             max(z2(1,:))-z2_max;    % upper bound on the flipping phase
