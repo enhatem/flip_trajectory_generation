@@ -11,6 +11,7 @@ options = optimoptions(options,'SelectionFcn', @selectionroulette);
 options = optimoptions(options,'CrossoverFcn', @crossoversinglepoint);
 options = optimoptions(options,'MutationFcn', @mutationadaptfeasible);
 options = optimoptions(options,'Display', 'iter');
+options = optimoptions(options,'PlotFcn',{@gaplotbestf,@gaplotstopping});
 % options = optimoptions(options,'PlotFcn', { @gaplotbestf });
 [x,fval,exitflag,output,population,score] = ...
 ga(@objective_function,nvars,[],[],[],[],lb,ub,@NL_bounds,[],options);

@@ -16,20 +16,20 @@ step = 0.01; % 100 Hz
 g = 9.81;    % m/s^2
 
 % Bounds on the z trajectory of the reaching phase
-z1_min = 2;
-z1_max = 2.5;
+z1_min = 0.8;
+z1_max = 3.5;
 
 % Bounds on the z trajectory of the flipping phase
-z2_min = 1;
-z2_max = 2.5;
+z2_min = 0.8;
+z2_max = 3.5;
 
 % Bounds on the z trajectory of the recovery phase
-z3_min = 1;
-z3_max = 2.5;
+z3_min = 0.8;
+z3_max = 3.5;
 
 % Bound on y
 y_min = 0;
-y_max = 3;
+y_max = 2;
 
 % Maximum thrust and torque reachable by the drone
 u1_max = 0.9 * ( ( 57e-3 * g ) / 2 ); % Maximum thrust 
@@ -77,20 +77,27 @@ nonlcon = @NL_bounds;
 fun = @objective_function;
 
 %% Solving the optimization problem using genetic algorithm
+
+% seed used for reproducibility
 rng default
 
+% Genetic algorithm parameters
 nvars = 9;
 PopulationSize_Data = 200;
 CrossoverFraction_Data = 0.7;
 MaxStallGenerations_Data = 50;
 
-H = zeros(50,10);
+iter = 1;
+
+% Variables to store the solutions and output message
+H = zeros(iter,10);
 J = {};
 
-for i=1:50
-    [x,fval,exitflag,output,population,score] = ga_solver_code(nvars,lb,ub,PopulationSize_Data,CrossoverFraction_Data,MaxStallGenerations_Data);
+for i=1:iter
+    [x,fval,exitflag,output] = ga_solver_code(nvars,lb,ub,PopulationSize_Data,CrossoverFraction_Data,MaxStallGenerations_Data);
     H(i,1:9)=x;
     H(i,10)=fval;
+    J{i} = output.message
     
     z_hover1    = x(1);
     z_start     = x(2);
@@ -105,7 +112,7 @@ for i=1:50
     build_trajectory
     visualize_trajectory;
 end
-H
+
 
 % options = optimoptions('ga','ConstraintTolerance',1e-20, ...
 %                        'PlotFcn', @gaplotbestf, ...
@@ -123,21 +130,30 @@ H
 % t3          = x(9);
 
 %% Building and plotting the trajectory
-build_trajectory;
-visualize_results;
+% z_hover1    = x(1);
+% z_start     = x(2);
+% z_end       = x(3);
+% z_hover2    = x(4);
+% phi_start   = x(5);
+% phi_end     = x(6);
+% t1          = x(7);
+% t2          = x(8);
+% t3          = x(9);
+% build_trajectory;
+% visualize_results;
+%%
 
-
-%% Write trajectory to file
-
-py = y';
-pz = z';
-roll = phi';
-vy = yd';
-vz = zd';
-rolld = phid';
-
-cref_X = [py pz roll vy vz rolld];
-ref_U = [u1' u2'];
-%% 
-dlmwrite('saved_data/traj_ref.csv',ref_X);
-dlmwrite('saved_data/input_ref.csv',ref_U);
+% %% Write trajectory to file
+% 
+% py = y';
+% pz = z';
+% roll = phi';
+% vy = yd';
+% vz = zd';
+% rolld = phid';
+% 
+% ref_X = [py pz roll vy vz rolld];
+% ref_U = [u1' u2'];
+% %% 
+% dlmwrite('saved_data/traj_ref.csv',ref_X);
+% dlmwrite('saved_data/input_ref.csv',ref_U);
