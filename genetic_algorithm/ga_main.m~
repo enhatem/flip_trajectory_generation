@@ -16,16 +16,16 @@ step = 0.01; % 100 Hz
 g = 9.81;    % m/s^2
 
 % Bounds on the z trajectory of the reaching phase
-z1_min = 3.0;
-z1_max = 4.5;
+z1_min = 1.8;
+z1_max = 3.5;
 
 % Bounds on the z trajectory of the flipping phase
 z2_min = 0.8;
-z2_max = 4.5;
+z2_max = 3.5;
 
 % Bounds on the z trajectory of the recovery phase
 z3_min = 0.8;
-z3_max = 2.0;
+z3_max = 1.8;
 
 % Bound on y
 y_min = 0;
@@ -88,7 +88,7 @@ CrossoverFraction_Data = 0.7;
 MaxStallGenerations_Data = 100;
 
 % number of times the ga solver will run
-iter =50;
+iter = 1;
 
 % Variables to store the solutions and output message
 H = zeros(iter,10);
@@ -137,31 +137,30 @@ end
 % t3          = x(9);
 
 %% Building and plotting the trajectory
-z_hover1    = x(1);
-z_start     = x(2);
-z_end       = x(3);
-z_hover2    = x(4);
-phi_start   = x(5);
-phi_end     = x(6);
-t1          = x(7);
-t2          = x(8);
-t3          = x(9);
-build_trajectory;
-visualize_results;
-visualize_trajectory;
+% z_hover1    = x(1);
+% z_start     = x(2);
+% z_end       = x(3);
+% z_hover2    = x(4);
+% phi_start   = x(5);
+% phi_end     = x(6);
+% t1          = x(7);
+% t2          = x(8);
+% t3          = x(9);
+% build_trajectory;
+% visualize_results;
 %%
 
 % %% Write trajectory to file
 
-py = y';
-pz = z';
-roll = phi';
-vy = yd';
-vz = zd';
-rolld = phid';
-
-ref_X = [py pz roll vy vz rolld];
-ref_U = [u1' u2'];
-%% 
-dlmwrite('saved_data/measX.csv',ref_X);
-dlmwrite('saved_data/simU.csv',ref_U);
+% py = y';
+% pz = z';
+% roll = phi';
+% vy = yd';
+% vz = zd';
+% rolld = phid';
+% 
+% ref_X = [py pz roll vy vz rolld];
+% ref_U = [u1' u2'];
+% %% 
+% dlmwrite('saved_data/traj_ref.csv',ref_X);
+% dlmwrite('saved_data/input_ref.csv',ref_U);

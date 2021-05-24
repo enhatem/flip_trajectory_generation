@@ -4,12 +4,12 @@ function [x,fval,exitflag,output,population,score] = ga_solver_code(nvars,lb,ub,
 %% Start with the default options
 options = optimoptions('ga');
 %% Modify options setting
-options = optimoptions(options,'PopulationSize', PopulationSize_Data);
-options = optimoptions(options,'CrossoverFraction', CrossoverFraction_Data);
-options = optimoptions(options,'MaxStallGenerations', MaxStallGenerations_Data);
-options = optimoptions(options,'SelectionFcn', @selectionroulette);
-options = optimoptions(options,'CrossoverFcn', @crossoversinglepoint);
-options = optimoptions(options,'MutationFcn', @mutationadaptfeasible);
+% options = optimoptions(options,'PopulationSize', PopulationSize_Data);
+% options = optimoptions(options,'CrossoverFraction', CrossoverFraction_Data);
+% options = optimoptions(options,'MaxStallGenerations', MaxStallGenerations_Data);
+% options = optimoptions(options,'SelectionFcn', @selectionroulette);
+% options = optimoptions(options,'CrossoverFcn', @crossoversinglepoint);
+% options = optimoptions(options,'MutationFcn', @mutationadaptfeasible);
 options = optimoptions(options,'Display', 'iter');
 options = optimoptions(options,'PlotFcn',{@gaplotbestf,@gaplotstopping});
 % options = optimoptions(options,'PlotFcn', { @gaplotbestf });
