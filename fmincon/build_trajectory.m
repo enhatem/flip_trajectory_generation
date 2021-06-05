@@ -13,16 +13,16 @@ phi1 = trajectory(phi1_start,phi1_end,t1);
 coeff_z2 = [-g/2 ((z_end-z_start)/t2+g*t2/2) z_start];
 coeff_zd2 = polyder(coeff_z2);
 coeff_zdd2 = polyder(coeff_zd2);
-z2 = polyval(coeff_z2,step:step:t2);
-zd2 = polyval(coeff_zd2,step:step:t2);
-zdd2 = polyval(coeff_zdd2,step:step:t2);
+z2 = polyval(coeff_z2,Step:Step:t2);
+zd2 = polyval(coeff_zd2,Step:Step:t2);
+zdd2 = polyval(coeff_zdd2,Step:Step:t2);
 
 coeff_phi2 = [(phi_end-phi_start)/t2 phi_start];
 coeff_phid2 = polyder(coeff_phi2);
 coeff_phidd2 = polyder(coeff_phid2);
-phi2 = polyval(coeff_phi2,step:step:t2);
-phid2 = polyval(coeff_phid2,step:step:t2);
-phidd2 = polyval(coeff_phidd2,step:step:t2);
+phi2 = polyval(coeff_phi2,Step:Step:t2);
+phid2 = polyval(coeff_phid2,Step:Step:t2);
+phidd2 = polyval(coeff_phidd2,Step:Step:t2);
 
 
 %% Recovery phase
@@ -47,19 +47,54 @@ phidd = [phi1(3,:) phidd2 phi3(3,:)];
 
 gravity = g*ones(size(z));
 
+t_Steps = 0.01:0.01:t1+t2+t3;
+
 ydd = -tan(phi).*(zdd + gravity);
-yd = integrate(ydd,0);
-y = integrate(yd,0);
+
+
+% %% manual numerical integration (very bad)
+% yd = integrate(ydd,0);
+% y = integrate(yd,0);
+
+% %% numerical integration with (cumtrapz)
+% yd0 = 0; % initial condition for yd
+% y0  = 0; % initial condition for y
+% yd = yd0 + cumtrapz(t_Steps,ydd);
+% y = y0 + cumtrapz(t_Steps,yd);
+
+
+%% integrate ydd to obtain yd
+
+total_time = t1+t2+t3;
+n = length(zdd);
+
+gt = linspace(0,total_time,n);  % function evaluation times
+g = -tan(phi).*(zdd + gravity); % function: ydd = g = -tan(phi).*(zdd + gravity)
+
+yd0 = 0; % initial condition
+% opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
+[T_yd,yd] = ode45(@(T_yd,yd) myode_ydd(T_yd,gt,g), t_Steps, yd0);
+
+%% integrate yd to obtain y
+
+ht = gt;
+h = yd;
+
+% tspan = [0 1.99]; % time span
+y0 = 0; % initial condition
+% opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
+[T_y,y] = ode45(@(T_y,y) myode_yd(T_y,ht,h), t_Steps, y0);
+
+y = y.';
+%% calculate the required thrust u1 and torque u2 throughout the trajectory
 
 u1 = m*(zdd+gravity)./cos(phi);
 u2 = Ixx*phidd;
 
-
-
-M = [1 1; 
-    l -l];
-
-F = M \ [u1;u2];
-
-f1 = F(1,:);
-f2 = F(2,:);
+% M = [1 1; 
+%     l -l];
+% 
+% F = M \ [u1;u2];
+% 
+% f1 = F(1,:);
+% f2 = F(2,:);

@@ -25,7 +25,7 @@ z2_max = 4.5;
 
 % Bounds on the z trajectory of the recovery phase
 z3_min = 0.8;
-z3_max = 2.0;
+z3_max = 2.5;
 
 % Bound on y
 y_min = 0;
@@ -153,15 +153,15 @@ visualize_trajectory;
 
 % %% Write trajectory to file
 
-py = y';
-pz = z';
-roll = phi';
-vy = yd';
-vz = zd';
-rolld = phid';
-
-ref_X = [py pz roll vy vz rolld];
-ref_U = [u1' u2'];
-%% 
-dlmwrite('saved_data/measX.csv',ref_X);
-dlmwrite('saved_data/simU.csv',ref_U);
+% py = y';
+% pz = z';
+% roll = phi';
+% vy = yd';
+% vz = zd';
+% rolld = phid';
+% 
+% ref_X = [py pz roll vy vz rolld];
+% ref_U = [u1' u2'];
+% %% 
+% dlmwrite('saved_data/measX.csv',ref_X);
+% dlmwrite('saved_data/simU.csv',ref_U);

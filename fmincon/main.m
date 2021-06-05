@@ -1,10 +1,10 @@
-clear all; 
-close all; 
+clear all;
+close all;
 clc;
 
 %% Constant Parameters
 
-global g step z1_min z2_min z3_min z1_max z2_max z3_max m Ixx l flips u1_max u2_max
+global g Step z1_min z2_min z3_min z1_max z2_max z3_max m Ixx l flips u1_max u2_max
 
 % Drone parameters
 m =  27e-3 / 2; % mass
@@ -12,20 +12,20 @@ Ixx =  1.657171e-05; % Inertia
 l = 0.046; % arm length
 
 % Constants
-step = 0.01; % 100 Hz
+Step = 0.01; % 100 Hz
 g = 9.81; % m/s^2
 
 % Bounds on the z trajectory of the reaching phase
-z1_min = 3.1;
-z1_max = 3.5;
+z1_min = 3.0;
+z1_max = 6.5;
 
 % Bounds on the z trajectory of the flipping phase
 z2_min = 0.8;
-z2_max = 3.5;
+z2_max = 6.5;
 
 % Bounds on the z trajectory of the recovery phase
-z3_min = 1;
-z3_max = 2.9;
+z3_min = 0.8;
+z3_max = 2.5;
 
 % Maximum thrust and torque reachable by the drone
 u1_max = 0.9 * ( ( 57e-3 * g ) / 2 ); % Maximum thrust 
@@ -73,9 +73,11 @@ min_time = @objective_function;
 
 %% Optimization problem
 
+
+
 % Initial condition
-% x0 = [3.1 3.4 1.5 1.1 pi/2-0.2 (3/2+0.2)*flips*pi 0.2 2 0.2];
-x0 = [ 1.2279    3.1190    3.1201    1.1799    1.5708    4.7124    0.9269    0.5156    0.9167 ];
+% x0 = [3.1 3.4 1.5 1.1 pi/2-0.2 (3/2+0.2)*flips*pi 0.2 2 0.2]
+x0 = [ 3.11    6.49    2.5    0.9    pi/2-0.2    (3/2+0.2)*flips*pi    1.5   1  1 ];
 options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
                     1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
 
@@ -87,12 +89,16 @@ z_end       = solution(3);
 z_hover2    = solution(4);
 phi_start   = solution(5);
 phi_end     = solution(6);
-t1          = solution(7);
-t2          = solution(8);
-t3          = solution(9);
+% t1          = solution(7);
+% t2          = solution(8);
+% t3          = solution(9);
+t1          = round(solution(7),2);
+t2          = round(solution(8),2);
+t3          = round(solution(9),2);
 
 %% Visualize results
 
 build_trajectory;
 visualize_results;
+visualize_trajectory;
 
