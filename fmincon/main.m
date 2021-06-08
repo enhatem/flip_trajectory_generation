@@ -17,15 +17,15 @@ g = 9.81; % m/s^2
 
 % Bounds on the z trajectory of the reaching phase
 z1_min = 0.8;
-z1_max = 4.5;
+z1_max = 3.5;
 
 % Bounds on the z trajectory of the flipping phase
 z2_min = 0.8;
-z2_max = 4.5;
+z2_max = 3.5;
 
 % Bounds on the z trajectory of the recovery phase
 z3_min = 0.8;
-z3_max = 4.5;
+z3_max = 3.5;
 
 % Maximum thrust and torque reachable by the drone
 u1_max = 0.9 * ( ( 46e-3 * g ) / 2 ); % Maximum thrust 

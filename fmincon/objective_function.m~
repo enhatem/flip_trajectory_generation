@@ -61,14 +61,40 @@ function J = objective_function(x)
     t = linspace(0,t1+t2+t3,n);
 
     % Calculating and integrating ydd twice to find the trajectory along y
+
+    % ydd = -tan(phi).*(zdd + gravity);
+    % yd0 = 0; % initial condition for yd
+    % y0  = 0; % initial condition for y
+    % yd = yd0 + cumtrapz(t,ydd);
+    % y = y0 + cumtrapz(t,yd);
+
+    %% integrating ydd to obtain yd
+
+    total_time = t1+t2+t3;
+    n = length(zdd);
+
+    gt = linspace(0,total_time,n);  % function evaluation times
+    g_t = -tan(phi).*(zdd + gravity); % function: ydd = g = -tan(phi).*(zdd + gravity)
+
+    yd0 = 0; % initial condition
+    % opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
+    [T_yd,yd] = ode45(@(T_yd,yd) myode_ydd(T_yd,gt,g_t), t, yd0);
+
+    %% integrate yd to obtain y
+
+    ht = gt;
+    h = yd;
+
+    % tspan = [0 1.99]; % time span
+    y0 = 0; % initial condition
+    % opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
+    [T_y,y] = ode45(@(T_y,y) myode_yd(T_y,ht,h), t, y0);
+
+    y = y.';
+
+    % J = trapz(t,z)^2 + trapz(t,y)^2 + trapz(t,u1)^2;
     
-    ydd = -tan(phi).*(zdd + gravity);
-    yd0 = 0; % initial condition for yd
-    y0  = 0; % initial condition for y
-    yd = yd0 + cumtrapz(t,ydd);
-    y = y0 + cumtrapz(t,yd);
-    
-    %J = trapz(t,z)^2 + trapz(t,y)^2 + trapz(t,u1)^2; % + trapz(t,u1)^2;
+    J = trapz(t,y) + trapz(t,z) + trapz(t,u1);
     
     % objective function: J = t1 + t2 + t3
     % J = trapz(t,u1); % x(7) + x(8) + x(9);

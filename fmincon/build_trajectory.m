@@ -47,7 +47,11 @@ phidd = [phi1(3,:) phidd2 phi3(3,:)];
 
 gravity = g*ones(size(z));
 
-t_Steps = 0.01:0.01:t1+t2+t3;
+% t_Steps = 0.01:0.01:t1+t2+t3;
+
+n = length(zdd);
+
+t_steps = linspace(0,t1+t2+t3,n);
 
 ydd = -tan(phi).*(zdd + gravity);
 
@@ -73,7 +77,7 @@ g = -tan(phi).*(zdd + gravity); % function: ydd = g = -tan(phi).*(zdd + gravity)
 
 yd0 = 0; % initial condition
 % opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
-[T_yd,yd] = ode45(@(T_yd,yd) myode_ydd(T_yd,gt,g), t_Steps, yd0);
+[T_yd,yd] = ode45(@(T_yd,yd) myode_ydd(T_yd,gt,g), t_steps, yd0);
 
 %% integrate yd to obtain y
 
@@ -83,7 +87,7 @@ h = yd;
 % tspan = [0 1.99]; % time span
 y0 = 0; % initial condition
 % opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
-[T_y,y] = ode45(@(T_y,y) myode_yd(T_y,ht,h), t_Steps, y0);
+[T_y,y] = ode45(@(T_y,y) myode_yd(T_y,ht,h), t_steps, y0);
 
 y = y.';
 %% calculate the required thrust u1 and torque u2 throughout the trajectory
