@@ -2,7 +2,7 @@ function [c,ceq] = NL_bounds(x)
 %NL_BOUNDS extracts the nonlinear bounds that will be used in the
 %optimization problem.
 
-    global g step z1_min z2_min z3_min z1_max z2_max z3_max y_min y_max m Ixx l flips u1_max u1_min u2_max u2_min
+    global g t_step z1_min z2_min z3_min z1_max z2_max z3_max y_min y_max m Ixx l flips u1_max u1_min u2_max u2_min
 
     ceq = []; % no equality constraints
     
@@ -33,16 +33,16 @@ function [c,ceq] = NL_bounds(x)
     coeff_z2 = [-g/2 ((z_end-z_start)/t2+g*t2/2) z_start];
     coeff_zd2 = polyder(coeff_z2);
     coeff_zdd2 = polyder(coeff_zd2);
-    z2 = polyval(coeff_z2,step:step:t2);
-    zdd2 = polyval(coeff_zdd2,step:step:t2);
+    z2 = polyval(coeff_z2,t_step:t_step:t2);
+    zdd2 = polyval(coeff_zdd2,t_step:t_step:t2);
 
     % Flipping phase (phi)
     coeff_phi2 = [(phi_end-phi_start)/t2 phi_start];
     coeff_phid2 = polyder(coeff_phi2);
     coeff_phidd2 = polyder(coeff_phid2);
-    phi2 = polyval(coeff_phi2,step:step:t2);
-    phid2 = polyval(coeff_phid2,step:step:t2);
-    phidd2 = polyval(coeff_phidd2,step:step:t2);
+    phi2 = polyval(coeff_phi2,t_step:t_step:t2);
+    phid2 = polyval(coeff_phid2,t_step:t_step:t2);
+    phidd2 = polyval(coeff_phidd2,t_step:t_step:t2);
     
     % Recovery phase
     z3_start = [z_end ((z_start-z_end)/t2-g*t2/2) -g 0 0];

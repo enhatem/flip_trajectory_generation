@@ -1,6 +1,6 @@
-tc = step:step:t1;
-tf = (t1+step):step:(t1+t2);
-tr = (t1+t2+step):step:(t1+t2+t3);
+tc = t_step:t_step:t1;
+tf = (t1+t_step):t_step:(t1+t2);
+tr = (t1+t2+t_step):t_step:(t1+t2+t3);
 
 y1 = y(1,1:length(z1));
 y2 = y(1,length(z1)+1:length(z1)+length(z2));

@@ -13,16 +13,16 @@ phi1 = trajectory(phi1_start,phi1_end,t1);
 coeff_z2 = [-g/2 ((z_end-z_start)/t2+g*t2/2) z_start];
 coeff_zd2 = polyder(coeff_z2);
 coeff_zdd2 = polyder(coeff_zd2);
-z2 = polyval(coeff_z2,step:step:t2);
-zd2 = polyval(coeff_zd2,step:step:t2);
-zdd2 = polyval(coeff_zdd2,step:step:t2);
+z2 = polyval(coeff_z2,t_step:t_step:t2);
+zd2 = polyval(coeff_zd2,t_step:t_step:t2);
+zdd2 = polyval(coeff_zdd2,t_step:t_step:t2);
 
 coeff_phi2 = [(phi_end-phi_start)/t2 phi_start];
 coeff_phid2 = polyder(coeff_phi2);
 coeff_phidd2 = polyder(coeff_phid2);
-phi2 = polyval(coeff_phi2,step:step:t2);
-phid2 = polyval(coeff_phid2,step:step:t2);
-phidd2 = polyval(coeff_phidd2,step:step:t2);
+phi2 = polyval(coeff_phi2,t_step:t_step:t2);
+phid2 = polyval(coeff_phid2,t_step:t_step:t2);
+phidd2 = polyval(coeff_phidd2,t_step:t_step:t2);
 
 
 %% Recovery phase

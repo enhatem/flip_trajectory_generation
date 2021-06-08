@@ -1,11 +1,11 @@
 function traj = trajectory(start,goal,time)
  
-    global step;
+    global t_step;
 
     [A,b] = build_matrix(start,goal,time);
     coeff_p = fliplr((A\b)');    
  
-    t = step:step:time;
+    t = t_step:t_step:time;
     
     coeff_v = polyder(coeff_p); % coefficients of the velocity polynomial
     coeff_a = polyder(coeff_v); % coefficients of the acceleration polynomial

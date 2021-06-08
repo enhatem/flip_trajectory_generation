@@ -4,7 +4,7 @@ clc;
 
 %% Constant Parameters
 
-global g step z1_min z2_min z3_min z1_max z2_max z3_max y_min y_max m Ixx l flips u1_max u1_min u2_max u2_min
+global g t_step z1_min z2_min z3_min z1_max z2_max z3_max y_min y_max m Ixx l flips u1_max u1_min u2_max u2_min
 
 % Drone parameters
 m =  27e-3 / 2; % mass
@@ -12,7 +12,7 @@ Ixx =  1.657171e-05; % Inertia
 l = 0.046;% arm length
 
 % Constants
-step = 0.01; % 100 Hz
+t_step = 0.01; % 100 Hz
 g = 9.81;    % m/s^2
 
 % Bounds on the z trajectory of the reaching phase
