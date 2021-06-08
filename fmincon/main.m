@@ -16,19 +16,19 @@ Step = 0.01; % 100 Hz
 g = 9.81; % m/s^2
 
 % Bounds on the z trajectory of the reaching phase
-z1_min = 3.0;
-z1_max = 6.5;
+z1_min = 0.8;
+z1_max = 4.5;
 
 % Bounds on the z trajectory of the flipping phase
 z2_min = 0.8;
-z2_max = 6.5;
+z2_max = 4.5;
 
 % Bounds on the z trajectory of the recovery phase
 z3_min = 0.8;
-z3_max = 2.5;
+z3_max = 4.5;
 
 % Maximum thrust and torque reachable by the drone
-u1_max = 0.9 * ( ( 57e-3 * g ) / 2 ); % Maximum thrust 
+u1_max = 0.9 * ( ( 46e-3 * g ) / 2 ); % Maximum thrust 
 u2_max = 0.1 * ( 1 / 2 * u1_max * l); % Maximum torque
 
 % Number of flips to be perfomed by the drone
@@ -50,15 +50,15 @@ phi_recovery_start = (2*(flips-1)*pi+3/2*pi);
 phi_recovery_end   = 2*flips*pi;
 
 % bounds on t1 (time of the reaching phase trajectory)
-t1_min = 0;
+t1_min = 0.1;
 t1_max = inf;
 
 % bounds on t2 (time of the flipping phase trajectory)
-t2_min = 0;
+t2_min = 0.05;
 t2_max = inf;
 
 % bounds on t3 (time of the recovery phase trajectory)
-t3_min = 0;
+t3_min = 0.1;
 t3_max = inf;
 
 % lower and upper bounds
@@ -77,7 +77,7 @@ min_time = @objective_function;
 
 % Initial condition
 % x0 = [3.1 3.4 1.5 1.1 pi/2-0.2 (3/2+0.2)*flips*pi 0.2 2 0.2]
-x0 = [ 3.11    6.49    2.5    0.9    pi/2-0.2    (3/2+0.2)*flips*pi    1.5   1  1 ];
+x0 = [ 3.11    3.49    2.5    0.9    pi/2-0.2    (3/2+0.2)*flips*pi    1.5   1  1 ];
 options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
                     1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
 

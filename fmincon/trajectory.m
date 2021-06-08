@@ -3,7 +3,12 @@ function traj = trajectory(start,goal,time)
     global Step;
 
     [A,b] = build_matrix(start,goal,time);
-    coeff_p = fliplr((A\b)');    
+    
+    [U,S,V] = svd(A);
+    
+    A_inv = V * ( S \ U' );
+    
+    coeff_p = fliplr((A_inv*b)');    
  
     t = Step:Step:time;
     % t = 0:step:time;

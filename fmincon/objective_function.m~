@@ -68,9 +68,7 @@ function J = objective_function(x)
     yd = yd0 + cumtrapz(t,ydd);
     y = y0 + cumtrapz(t,yd);
     
-    % J = trapz(t,z)^2 + trapz(t,y)^2 + trapz(t,u1)^2; % + trapz(t,u1)^2;
-    
-    J = trapz(t,y) + trapz(t,z) + trapz(t,u1);
+    %J = trapz(t,z)^2 + trapz(t,y)^2 + trapz(t,u1)^2; % + trapz(t,u1)^2;
     
     % objective function: J = t1 + t2 + t3
     % J = trapz(t,u1); % x(7) + x(8) + x(9);
