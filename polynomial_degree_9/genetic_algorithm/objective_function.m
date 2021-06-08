@@ -1,6 +1,6 @@
 function J = objective_function(x)
     
-    global g Step flips m
+    global g t_step flips m
     
     z_hover1    = x(1);
     z_start     = x(2);
@@ -29,11 +29,11 @@ function J = objective_function(x)
     coeff_z2 = [-g/2 ((z_end-z_start)/t2+g*t2/2) z_start];
     coeff_zd2 = polyder(coeff_z2);
     coeff_zdd2 = polyder(coeff_zd2);
-    z2 = polyval(coeff_z2,Step:Step:t2);
-    zdd2 = polyval(coeff_zdd2,Step:Step:t2);
+    z2 = polyval(coeff_z2,t_step:t_step:t2);
+    zdd2 = polyval(coeff_zdd2,t_step:t_step:t2);
 
     coeff_phi2 = [(phi_end-phi_start)/t2 phi_start];
-    phi2 = polyval(coeff_phi2,Step:Step:t2);
+    phi2 = polyval(coeff_phi2,t_step:t_step:t2);
 
     %% Recovery phase
 
@@ -62,39 +62,39 @@ function J = objective_function(x)
 
     % Calculating and integrating ydd twice to find the trajectory along y
 
-    % ydd = -tan(phi).*(zdd + gravity);
-    % yd0 = 0; % initial condition for yd
-    % y0  = 0; % initial condition for y
-    % yd = yd0 + cumtrapz(t,ydd);
-    % y = y0 + cumtrapz(t,yd);
+    ydd = -tan(phi).*(zdd + gravity);
+    yd0 = 0; % initial condition for yd
+    y0  = 0; % initial condition for y
+    yd = yd0 + cumtrapz(t,ydd);
+    y = y0 + cumtrapz(t,yd);
 
-    %% integrating ydd to obtain yd
-
-    total_time = t1+t2+t3;
-    n = length(zdd);
-
-    gt = linspace(0,total_time,n);  % function evaluation times
-    g_t = -tan(phi).*(zdd + gravity); % function: ydd = g = -tan(phi).*(zdd + gravity)
-
-    yd0 = 0; % initial condition
-    % opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
-    [T_yd,yd] = ode45(@(T_yd,yd) myode_ydd(T_yd,gt,g_t), t, yd0);
-
-    %% integrate yd to obtain y
-
-    ht = gt;
-    h = yd;
-
-    % tspan = [0 1.99]; % time span
-    y0 = 0; % initial condition
-    % opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
-    [T_y,y] = ode45(@(T_y,y) myode_yd(T_y,ht,h), t, y0);
-
-    y = y.';
-
-    % J = trapz(t,z)^2 + trapz(t,y)^2 + trapz(t,u1)^2;
-    
-    J = trapz(t,y) + trapz(t,z) + trapz(t,u1);
+%     %% integrating ydd to obtain yd
+% 
+%     total_time = t1+t2+t3;
+%     n = length(zdd);
+% 
+%     gt = linspace(0,total_time,n);  % function evaluation times
+%     g_t = -tan(phi).*(zdd + gravity); % function: ydd = g = -tan(phi).*(zdd + gravity)
+% 
+%     yd0 = 0; % initial condition
+%     % opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
+%     [T_yd,yd] = ode45(@(T_yd,yd) myode_ydd(T_yd,gt,g_t), t, yd0);
+% 
+%     %% integrate yd to obtain y
+% 
+%     ht = gt;
+%     h = yd;
+% 
+%     % tspan = [0 1.99]; % time span
+%     y0 = 0; % initial condition
+%     % opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
+%     [T_y,y] = ode45(@(T_y,y) myode_yd(T_y,ht,h), t, y0);
+% 
+%     y = y.';
+% 
+%     % J = trapz(t,z)^2 + trapz(t,y)^2 + trapz(t,u1)^2;
+%     
+    J = trapz(t,z)^2 + trapz(t,u1)^2;
     
     % objective function: J = t1 + t2 + t3
     % J = trapz(t,u1); % x(7) + x(8) + x(9);

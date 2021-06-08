@@ -64,32 +64,39 @@ function [c,ceq] = NL_bounds(x)
 
     gravity = g*ones(size(z));
     
-    ydd = -tan(phi).*(zdd + gravity);
-    yd = integrate(ydd,0);
-    y = integrate(yd,0);
 
     % Input
     u1 = m*(zdd+gravity)./cos(phi);
     u2 = Ixx*phidd;
     
+    n = length(u1);
+    
+    t = linspace(0,t1+t2+t3,n);
+
+    % Calculating and integrating ydd twice to find the trajectory along y
+
+    ydd = -tan(phi).*(zdd + gravity);
+    yd0 = 0; % initial condition for yd
+    y0  = 0; % initial condition for y
+    yd = yd0 + cumtrapz(t,ydd);
+    y = y0 + cumtrapz(t,yd);
+    
     % Bounds 
-    c = [   max(z1(1,:))-z1_max;    % upper bound on the reaching phase
-           -min(z1(1,:))+z1_min;    % lower bound on the reaching phase
-            max(z2(1,:))-z2_max;    % upper bound on the flipping phase
-           -min(z2(1,:))+z2_min;    % lower bound on the flipping phase
-            max(z3(1,:))-z3_max;    % upper bound on the recovery phase
-           -min(z3(1,:))+z3_min;    % lower bound on the recovery phase
-           % -min(y) + y_min;       % lower bound on the y trajectory
-           %  max(y) - y_max;       % upper bound on the y trajectory
-           -min(u1)+u1_min;       % lower bound on u1 (u1>=0)
-            max(u1)-u1_max;         % upper bound on u1 (u1<=u1 max)
-           -min(u2)+u2_min;         % lower bound on u2 (u2>=-u2_max)
-            max(u2)-u2_max;         % upper bound on u2 (u2<=u2_max)
-           -min(phi);               % lower bound on phi
-            max(phi)-2*pi;          % upper bound on phi
-           -4*pi-min(phid);         % lower bound on thetad (thetad >= thetad_min) (angular velocity for aggressive maneuvers is around 720 deg/s)
-            max(phid)-4*pi];        % upper bound on thetad (thetad <= thetad_max) (angular velocity for aggressive maneuvers is around 720 deg/s)
-    
-    
+    c = [   max(z1(1,:))-z1_max;  % upper bound on the reaching phase
+           -min(z1(1,:))+z1_min;  % lower bound on the reaching phase
+            max(z2(1,:))-z2_max;  % upper bound on the flipping phase
+           -min(z2(1,:))+z2_min;  % lower bound on the flipping phase
+            max(z3(1,:))-z3_max;  % upper bound on the recovery phase
+           -min(z3(1,:))+z3_min;  % lower bound on the recovery phase
+           -min(y) + y_min;       % lower bound on the y trajectory
+            max(y) - y_max;       % upper bound on the y trajectory
+           -min(u1) + u1_min;     % lower bound on u1 (u1>=0)
+            max(u1) - u1_max;     % upper bound on u1 (u1<=u1 max)
+           -min(u2)+u2_min;       % lower bound on u2 (u2>=-u2_max)
+            max(u2)-u2_max;       % upper bound on u2 (u2<=u2_max)
+           -min(phi);             % lower bound on phi
+            max(phi)-2*pi;        % upper bound on phi
+           -4*pi-min(phid);       % lower bound on thetad (thetad >= thetad_min) (angular velocity for aggressive maneuvers is around 720 deg/s)
+            max(phid)-4*pi ];     % upper bound on thetad (thetad <= thetad_max) (angular velocity for aggressive maneuvers is around 720 deg/s)
 end
 

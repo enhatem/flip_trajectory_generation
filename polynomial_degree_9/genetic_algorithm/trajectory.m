@@ -3,7 +3,13 @@ function traj = trajectory(start,goal,time)
     global t_step;
 
     [A,b] = build_matrix(start,goal,time);
-    coeff_p = fliplr((A\b)');    
+    
+    % Inverting A with svd decomposition
+    [U,S,V] = svd(A);
+    
+    A_inv = V * ( S \ U' );
+    
+    coeff_p = fliplr((A_inv*b)');    
  
     t = t_step:t_step:time;
     

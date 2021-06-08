@@ -7,7 +7,7 @@ clc;
 global g t_step z1_min z2_min z3_min z1_max z2_max z3_max y_min y_max m Ixx l flips u1_max u1_min u2_max u2_min
 
 % Drone parameters
-m =  27e-3 / 2; % mass
+m =  29e-3 / 2; % mass
 Ixx =  1.657171e-05; % Inertia
 l = 0.046;% arm length
 
@@ -16,7 +16,7 @@ t_step = 0.01; % 100 Hz
 g = 9.81;    % m/s^2
 
 % Bounds on the z trajectory of the reaching phase
-z1_min = 3.0;
+z1_min = 0.8;
 z1_max = 4.5;
 
 % Bounds on the z trajectory of the flipping phase
@@ -25,14 +25,14 @@ z2_max = 4.5;
 
 % Bounds on the z trajectory of the recovery phase
 z3_min = 0.8;
-z3_max = 2.5;
+z3_max = 4.5;
 
 % Bound on y
 y_min = 0;
 y_max = 2;
 
 % Maximum thrust and torque reachable by the drone
-u1_max = 0.9 * ( ( 57e-3 * g ) / 2 ); % Maximum thrust 
+u1_max = 0.9 * ( ( 46e-3 * g ) / 2 ); % Maximum thrust 
 u1_min = 0;                           % Minimum thrust
 u2_max = 0.1 * ( 1 / 2 * u1_max * l); % Maximum torque
 u2_min = -u2_max;                     % Minimum torque
@@ -59,7 +59,7 @@ t1_min = 1e-1;
 t1_max = inf;
 
 % bounds on t2 (time of the flipping phase trajectory)
-t2_min = 1e-1;
+t2_min = 1e-2;
 t2_max = inf;
 
 % bounds on t3 (time of the recovery phase trajectory)
@@ -88,7 +88,7 @@ CrossoverFraction_Data = 0.7;
 MaxStallGenerations_Data = 100;
 
 % number of times the ga solver will run
-iter =50;
+iter =1;
 
 % Variables to store the solutions and output message
 H = zeros(iter,10);
@@ -137,18 +137,18 @@ end
 % t3          = x(9);
 
 %% Building and plotting the trajectory
-z_hover1    = x(1);
-z_start     = x(2);
-z_end       = x(3);
-z_hover2    = x(4);
-phi_start   = x(5);
-phi_end     = x(6);
-t1          = x(7);
-t2          = x(8);
-t3          = x(9);
-build_trajectory;
-visualize_results;
-visualize_trajectory;
+% z_hover1    = x(1);
+% z_start     = x(2);
+% z_end       = x(3);
+% z_hover2    = x(4);
+% phi_start   = x(5);
+% phi_end     = x(6);
+% t1          = x(7);
+% t2          = x(8);
+% t3          = x(9);
+% build_trajectory;
+% visualize_results;
+% visualize_trajectory;
 %%
 
 % %% Write trajectory to file
