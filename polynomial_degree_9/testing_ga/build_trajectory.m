@@ -1,5 +1,3 @@
-global g
-
 %% Reaching phase
 
 z1_start = [z_hover1 0 0 0 0];
@@ -48,45 +46,35 @@ phid = [phi1(2,:) phid2 phi3(2,:)];
 phidd = [phi1(3,:) phidd2 phi3(3,:)];
 
 gravity = g*ones(size(z));
-u1 = m*(zdd+gravity)./cos(phi);
-
-% Calculating and integrating ydd twice to find the trajectory along y
-
-n = length(u1);
-t = linspace(0,t1+t2+t3,n);
 
 ydd = -tan(phi).*(zdd + gravity);
-yd0 = 0; % initial condition for yd
-y0  = 0; % initial condition for y
-yd = yd0 + cumtrapz(t,ydd);
-y = y0 + cumtrapz(t,yd);
 
-% %% integrate ydd to obtain yd
-% 
-% total_time = t1+t2+t3;
-% n = length(zdd);
-% 
-% t_steps = linspace(0,t1+t2+t3,n);
-% 
-% 
-% gt = linspace(0,total_time,n);  % function evaluation times
-% g = -tan(phi).*(zdd + gravity); % function: ydd = g = -tan(phi).*(zdd + gravity)
-% 
-% yd0 = 0; % initial condition
-% % opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
-% [T_yd,yd] = ode45(@(T_yd,yd) myode_ydd(T_yd,gt,g), t_steps, yd0);
-% 
-% %% integrate yd to obtain y
-% 
-% ht = gt;
-% h = yd;
-% 
-% % tspan = [0 1.99]; % time span
-% y0 = 0; % initial condition
-% % opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
-% [T_y,y] = ode45(@(T_y,y) myode_yd(T_y,ht,h), t_steps, y0);
-% 
-% y = y.';
+%% integrate ydd to obtain yd
+
+total_time = t1+t2+t3;
+n = length(zdd);
+
+t_steps = linspace(0,t1+t2+t3,n);
+
+
+gt = linspace(0,total_time,n);  % function evaluation times
+g = -tan(phi).*(zdd + gravity); % function: ydd = g = -tan(phi).*(zdd + gravity)
+
+yd0 = 0; % initial condition
+% opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
+[T_yd,yd] = ode45(@(T_yd,yd) myode_ydd(T_yd,gt,g), t_steps, yd0);
+
+%% integrate yd to obtain y
+
+ht = gt;
+h = yd;
+
+% tspan = [0 1.99]; % time span
+y0 = 0; % initial condition
+% opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
+[T_y,y] = ode45(@(T_y,y) myode_yd(T_y,ht,h), t_steps, y0);
+
+y = y.';
 
 
 

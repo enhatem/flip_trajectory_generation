@@ -4,6 +4,7 @@ function traj = trajectory(start,goal,time)
 
     [A,b] = build_matrix(start,goal,time);
     
+    % Inverting A with svd decomposition
     [U,S,V] = svd(A);
     
     A_inv = V * ( S \ U' );
@@ -11,7 +12,6 @@ function traj = trajectory(start,goal,time)
     coeff_p = fliplr((A_inv*b)');    
  
     t = t_step:t_step:time;
-    % t = 0:step:time;
     
     coeff_v = polyder(coeff_p); % coefficients of the velocity polynomial
     coeff_a = polyder(coeff_v); % coefficients of the acceleration polynomial

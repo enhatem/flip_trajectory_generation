@@ -4,7 +4,7 @@ clc;
 
 %% Constant Parameters
 
-global g t_step z1_min z2_min z3_min z1_max z2_max z3_max y_min y_max m Ixx l flips u1_max u1_min u2_max u2_min
+global g t_step z1_min_start z1_min_end z2_min z3_min z1_max_start z1_max_end z2_max z3_max y_min y_max m Ixx l flips u1_max u1_min u2_max u2_min
 
 % Drone parameters
 m =  29e-3 / 2; % mass
@@ -15,9 +15,13 @@ l = 0.046;% arm length
 t_step = 0.01; % 100 Hz
 g = 9.81;    % m/s^2
 
-% Bounds on the z trajectory of the reaching phase
-z1_min = 0.8;
-z1_max = 1.5;
+% Bounds on the z trajectory of the reaching phase (initial position)
+z1_min_start = 0.8;
+z1_max_start = 1.5;
+
+% Bounds on the z trajectory of the reaching phase (final position)
+z1_min_end = 1.2;
+z1_max_end = 1.5;
 
 % Bounds on the z trajectory of the flipping phase
 z2_min = 0.8;
@@ -59,7 +63,7 @@ t1_min = 1e-1;
 t1_max = inf;
 
 % bounds on t2 (time of the flipping phase trajectory)
-t2_min = 1e-2;
+t2_min = 1e-1;
 t2_max = inf;
 
 % bounds on t3 (time of the recovery phase trajectory)
@@ -67,11 +71,11 @@ t3_min = 1e-1;
 t3_max = inf;
 
 % lower and upper bounds
-lb = [ z1_min   z1_min   z2_min  z3_min  phi_reaching_start  phi_recovery_start  t1_min  t2_min  t3_min ];
-ub = [ z1_max   z1_max   z2_max  z3_max  phi_reaching_end    phi_recovery_end    t1_max  t2_max  t3_max ];
+lb = [ z1_min_start   z1_min_end   z2_min  z3_min  phi_reaching_start  phi_recovery_start  t1_min  t2_min  t3_min ];
+ub = [ z1_max_start   z1_max_end   z2_max  z3_max  phi_reaching_end    phi_recovery_end    t1_max  t2_max  t3_max ];
 
 % nonlinear bounds
-nonlcon = @NL_bounds;
+nonlcon = @NL_bounds_simple;
 
 % objective function
 fun = @objective_function;
@@ -88,7 +92,7 @@ CrossoverFraction_Data = 0.7;
 MaxStallGenerations_Data = 100;
 
 % number of times the ga solver will run
-iter =50;
+iter =1;
 
 % Variables to store the solutions and output message
 H = zeros(iter,10);
@@ -116,27 +120,15 @@ for i=1:iter
     t2          = x(8);
     t3          = x(9);
     
-    build_trajectory;
-    visualize_trajectory;
+    build_trajectory_simple;
+    
+    figure, plot(z), title('z(t)')
+    figure, plot(u1), title('u1(t)')
+    
+    
+    % visualize_trajectory;
 end
 
-
-%% 
-x = H(45,1:9)
-z_hover1    = x(1);
-z_start     = x(2);
-z_end       = x(3);
-z_hover2    = x(4);
-phi_start   = x(5);
-phi_end     = x(6);
-t1          = x(7);
-t2          = x(8);
-t3          = x(9);
-    
-build_trajectory;
-visualize_trajectory;
-figure, plot(u1), title('u1(t)')
-%%
 
 % options = optimoptions('ga','ConstraintTolerance',1e-20, ...
 %                        'PlotFcn', @gaplotbestf, ...

@@ -35,22 +35,27 @@ function J = objective_function(x)
     coeff_phi2 = [(phi_end-phi_start)/t2 phi_start];
     phi2 = polyval(coeff_phi2,t_step:t_step:t2);
 
-    %% Recovery phase
-
-    z3_start = [z_end ((z_start-z_end)/t2-g*t2/2) -g 0 0];
-    z3_end = [z_hover2 0 0 0 0];
-    z3 = trajectory(z3_start,z3_end,t3);
-
-    phi3_start = [phi_end (phi_end-phi_start)/t2 0 0 0];
-    phi3_end = [2*flips*pi 0 0 0 0];
-    phi3 = trajectory(phi3_start,phi3_end,t3);
+%     %% Recovery phase
+% 
+%     z3_start = [z_end ((z_start-z_end)/t2-g*t2/2) -g 0 0];
+%     z3_end = [z_hover2 0 0 0 0];
+%     z3 = trajectory(z3_start,z3_end,t3);
+% 
+%     phi3_start = [phi_end (phi_end-phi_start)/t2 0 0 0];
+%     phi3_end = [2*flips*pi 0 0 0 0];
+%     phi3 = trajectory(phi3_start,phi3_end,t3);
 
     %% Global trajectory
 
-    z = [z1(1,:) z2 z3(1,:)];
-    zdd = [z1(3,:) zdd2 z3(3,:)];
+%     z = [z1(1,:) z2 z3(1,:)];
+%     zdd = [z1(3,:) zdd2 z3(3,:)];
+% 
+%     phi = [phi1(1,:) phi2 phi3(1,:)];
 
-    phi = [phi1(1,:) phi2 phi3(1,:)];
+    z = [z1(1,:) z2];
+    zdd = [z1(3,:) zdd2];
+    
+    phi = [phi1(1,:) phi2];
 
     gravity = g*ones(size(zdd));
     
@@ -94,7 +99,7 @@ function J = objective_function(x)
 % 
 %     % J = trapz(t,z)^2 + trapz(t,y)^2 + trapz(t,u1)^2;
 %     
-    J = trapz(t,y)^2 + trapz(t,z)^2 + trapz(t,u1)^2;
+    J = trapz(t,y)^2 + trapz(t,z)^2 + 50*trapz(t,u1)^2;
     
     % objective function: J = t1 + t2 + t3
     % J = trapz(t,u1); % x(7) + x(8) + x(9);

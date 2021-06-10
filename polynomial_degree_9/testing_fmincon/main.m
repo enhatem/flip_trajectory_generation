@@ -54,7 +54,7 @@ t1_min = 0.1;
 t1_max = inf;
 
 % bounds on t2 (time of the flipping phase trajectory)
-t2_min = 0.05;
+t2_min = 0.1;
 t2_max = inf;
 
 % bounds on t3 (time of the recovery phase trajectory)
@@ -66,7 +66,7 @@ lb = [ z1_min   z1_min   z2_min  z3_min  phi_reaching_start  phi_recovery_start 
 ub = [ z1_max   z1_max   z2_max  z3_max  phi_reaching_end    phi_recovery_end    t1_max  t2_max  t3_max ];
 
 % nonlinear bounds
-nl_con = @NL_bounds;
+nl_con = @NL_bounds_simple;
 
 % objective function
 min_time = @objective_function;
@@ -77,8 +77,7 @@ min_time = @objective_function;
 
 % Initial condition
 % x0 = [3.1 3.4 1.5 1.1 pi/2-0.2 (3/2+0.2)*flips*pi 0.2 2 0.2]
-% x0 = [ 1    1.2    1.1    1.0    pi/2-0.2    (3/2+0.2)*flips*pi    0.3   0.2  0.3 ];
-x0 = [ 1    1.49    1.3    1.0    pi/2-0.2    (3/2+0.2)*flips*pi    0.4   0.3  0.4 ];
+x0 = [ 1.2    1.4   1.1    0.9    pi/2-0.2    (3/2+0.2)*flips*pi    0.3   0.3  0.4 ];
 options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
                     1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
 
@@ -90,16 +89,38 @@ z_end       = solution(3);
 z_hover2    = solution(4);
 phi_start   = solution(5);
 phi_end     = solution(6);
-t1          = solution(7);
-t2          = solution(8);
-t3          = solution(9);
-% t1          = round(solution(7),2);
-% t2          = round(solution(8),2);
-% t3          = round(solution(9),2);
+% t1          = solution(7);
+% t2          = solution(8);
+% t3          = solution(9);
+t1          = round(solution(7),2);
+t2          = round(solution(8),2);
+t3          = round(solution(9),2);
 
 %% Visualize results
 
-build_trajectory;
-visualize_results;
+build_trajectory_simple;
+
+figure, plot(z), title('z(t)')
+figure, plot(u1), title('u1(t)')
+% build_trajectory;
+% visualize_results;
 % visualize_trajectory;
 
+
+
+
+
+%% Write trajectory to file
+% 
+% py = y';
+% pz = z';
+% roll = phi';
+% vy = yd;
+% vz = zd';
+% rolld = phid';
+% 
+% ref_X = [py pz roll vy vz rolld];
+% ref_U = [u1' u2'];
+% %% 
+% dlmwrite('saved_data/measX.csv',ref_X);
+% dlmwrite('saved_data/simU.csv',ref_U);

@@ -5,9 +5,11 @@ function traj = trajectory(start,goal,time)
     [A,b] = build_matrix(start,goal,time);
     
     % Inverting A with svd decomposition
-    [U,S,V] = svd(A);
+    % [U,S,V] = svd(A);
     
-    A_inv = V * ( S \ U' );
+    % A_inv = V * ( S \ U' );
+    
+    A_inv = inv(A);
     
     coeff_p = fliplr((A_inv*b)');    
  

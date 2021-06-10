@@ -9,21 +9,21 @@ g = 9.81;
 
 %% parameters to be optimized
 
-t1 = 0.5;
-t2 = 0.7;
-t3 = 0.1;
-t4 = 0.4;
-t5 = 0.2;
-t6 = 0.5;
-t7 = 0.7;
+t1 = 0.3;
+t2 = 0.3;
+t3 = 0.3;
+t4 = 0.25; % flipping_phase_time
+t5 = 0.3;
+t6 = 0.3;
+t7 = 0.3;
 
-z1 = 1.4;
-z2 = 1.8;
-z3 = 1.7; % z_flip_start
-z4 = 1.6; % z_flip_end
-z5 = 1.5; 
-z6 = 1.3;
-z7 = 1.1;
+z1 = 1.2;
+z2 = 1.4;
+z3 = 1.6; % z_flip_start
+z4 = 1.8; % z_flip_end
+z5 = 1.2; 
+z6 = 1;
+z7 = 0.8;
 
 phi1 = 0.34; % 20deg
 phi2 = 0.4;
@@ -46,16 +46,16 @@ zdd2_des = (2*zd_des - zd_des) / t2;
 Z0 = [1 0 0];
 Z1 = [z1 zd_des zdd1_des];
 Z2 = [z2 2*zd_des zdd2_des];
-Z3 = [z3 ((z4-z3)/t3 - (g*t3)/2) -g ];
+Z3 = [z3 ((z4-z3)/t4 - (g*t4)/2) -g ];
 
 traj1 = trajectory_5(Z0,Z1,t1);
 T1 = linspace(0,0+t1,length(traj1(1,:)));
 figure, plot(T1,traj1(1,:)), hold on
-
+%%
 traj2 = trajectory_5(Z1,Z2,t2);
 T2 = linspace(0+t1,0+t1+t2,length(traj2(1,:)));
 plot(T2,traj2(1,:)), hold on
-
+%%
 traj3 = trajectory_5(Z2,Z3,t3);
 T3 = linspace(0+t1+t2,0+t1+t2+t3,length(traj3(1,:)));
 plot(T3,traj3(1,:)), hold on
@@ -89,4 +89,24 @@ plot(T6,traj6(1,:)), hold on
 
 traj7 = trajectory_5(Z6,Z7,t7);
 T7 = linspace(0+t1+t2+t3+t4+t5+t6, 0+t1+t2+t3+t4+t5+t6+t7,length(traj7(1,:)));
-plot(T7,traj7(1,:)), hold on
+plot(T7,traj7(1,:)), hold off
+
+traj_tot_p = [traj1(1,:) traj2(1,:) traj3(1,:) traj4(1,:) traj5(1,:) traj6(1,:) traj7(1,:)];
+t = linspace(0,t1+t2+t3+t4+t5+t6+t7, length(traj_tot_p(1,:)));
+
+% figure, plot(t,traj_tot_p), title('z(t) trajectory'), xlabel('time[s]'), ylabel('z[m]')
+
+
+
+%% velocity
+traj_tot_v = [traj1(2,:) traj2(2,:) traj3(2,:) traj4(2,:) traj5(2,:) traj6(2,:) traj7(2,:)];
+
+% figure, plot(t,traj_tot_v), title('vz(t) trajectory')
+
+figure, plot(T1,traj1(2,:)), hold on
+plot(T2,traj2(2,:)), hold on
+plot(T3,traj3(2,:)), hold on
+plot(T4,traj4(2,:)), hold on
+plot(T5,traj5(2,:)), hold on
+plot(T6,traj6(2,:)), hold on
+plot(T7,traj7(2,:)), hold off

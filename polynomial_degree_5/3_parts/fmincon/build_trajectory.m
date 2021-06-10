@@ -1,11 +1,11 @@
 %% Reaching phase
 
-z1_start = [z_hover1 0 0 0 0];
-z1_end = [z_start ((z_start-z_end)/t2 + g*t2/2) -g 0 0];
+z1_start = [z_hover1 0 0];
+z1_end = [z_start ((z_start-z_end)/t2 + g*t2/2) -g];
 z1 = trajectory(z1_start,z1_end,t1);
 
-phi1_start = [0 0 0 0 0];
-phi1_end = [phi_start (phi_end-phi_start)/t2 0 0 0];
+phi1_start = [0 0 0];
+phi1_end = [phi_start (phi_end-phi_start)/t2 0];
 phi1 = trajectory(phi1_start,phi1_end,t1);
 
 %% Flip phase
@@ -27,12 +27,12 @@ phidd2 = polyval(coeff_phidd2,t_step:t_step:t2);
 
 %% Recovery phase
 
-z3_start = [z_end ((z_start-z_end)/t2-g*t2/2) -g 0 0];
-z3_end = [z_hover2 0 0 0 0];
+z3_start = [z_end ((z_start-z_end)/t2-g*t2/2) -g];
+z3_end = [z_hover2 0 0];
 z3 = trajectory(z3_start,z3_end,t3);
 
-phi3_start = [phi_end (phi_end-phi_start)/t2 0 0 0];
-phi3_end = [2*flips*pi 0 0 0 0];
+phi3_start = [phi_end (phi_end-phi_start)/t2 0];
+phi3_end = [2*flips*pi 0 0];
 phi3 = trajectory(phi3_start,phi3_end,t3);
 
 %% Global trajectory
@@ -72,16 +72,16 @@ ydd = -tan(phi).*(zdd + gravity);
 total_time = t1+t2+t3;
 n = length(zdd);
 
-gt = linspace(0,total_time,n);  % function evaluation times
-g = -tan(phi).*(zdd + gravity); % function: ydd = g = -tan(phi).*(zdd + gravity)
+kt = linspace(0,total_time,n);  % function evaluation times
+k = -tan(phi).*(zdd + gravity); % function: ydd = g = -tan(phi).*(zdd + gravity)
 
 yd0 = 0; % initial condition
 % opts = odeset('RelTol',1e-2,'AbsTol',1e-4); % ode options
-[T_yd,yd] = ode45(@(T_yd,yd) myode_ydd(T_yd,gt,g), t_steps, yd0);
+[T_yd,yd] = ode45(@(T_yd,yd) myode_ydd(T_yd,kt,k), t_steps, yd0);
 
 %% integrate yd to obtain y
 
-ht = gt;
+ht = kt;
 h = yd;
 
 % tspan = [0 1.99]; % time span

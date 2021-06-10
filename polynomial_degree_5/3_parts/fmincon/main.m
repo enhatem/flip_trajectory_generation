@@ -77,7 +77,6 @@ min_time = @objective_function;
 
 % Initial condition
 % x0 = [3.1 3.4 1.5 1.1 pi/2-0.2 (3/2+0.2)*flips*pi 0.2 2 0.2]
-% x0 = [ 1    1.2    1.1    1.0    pi/2-0.2    (3/2+0.2)*flips*pi    0.3   0.2  0.3 ];
 x0 = [ 1    1.49    1.3    1.0    pi/2-0.2    (3/2+0.2)*flips*pi    0.4   0.3  0.4 ];
 options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
                     1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);

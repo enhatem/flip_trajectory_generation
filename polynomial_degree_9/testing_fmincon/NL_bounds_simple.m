@@ -1,4 +1,4 @@
-function [c,ceq] = NL_bounds(x)
+function [c,ceq] = NL_bounds_simple(x)
 %NL_BOUNDS extracts the nonlinear bounds that will be used in the
 %optimization problem.
 
@@ -44,23 +44,28 @@ function [c,ceq] = NL_bounds(x)
     phid2 = polyval(coeff_phid2,t_step:t_step:t2);
     phidd2 = polyval(coeff_phidd2,t_step:t_step:t2);
     
-    % Recovery phase
-    z3_start = [z_end ((z_start-z_end)/t2-g*t2/2) -g 0 0];
-    z3_end = [z_hover2 0 0 0 0];
-    z3 = trajectory(z3_start,z3_end,t3);
-
-    phi3_start = [phi_end (phi_end-phi_start)/t2 0 0 0];
-    phi3_end = [2*flips*pi 0 0 0 0];
-    phi3 = trajectory(phi3_start,phi3_end,t3);
+%     % Recovery phase
+%     z3_start = [z_end ((z_start-z_end)/t2-g*t2/2) -g 0 0];
+%     z3_end = [z_hover2 0 0 0 0];
+%     z3 = trajectory(z3_start,z3_end,t3);
+% 
+%     phi3_start = [phi_end (phi_end-phi_start)/t2 0 0 0];
+%     phi3_end = [2*flips*pi 0 0 0 0];
+%     phi3 = trajectory(phi3_start,phi3_end,t3);
     
     
     % Full trajectory
-    z = [z1(1,:) z2 z3(1,:)];
-    zdd = [z1(3,:) zdd2 z3(3,:)];
-
-    phi = [phi1(1,:) phi2 phi3(1,:)];
-    phid = [phi1(2,:) phid2 phi3(2,:)];
-    phidd = [phi1(3,:) phidd2 phi3(3,:)];
+%     z = [z1(1,:) z2 z3(1,:)];
+%     zdd = [z1(3,:) zdd2 z3(3,:)];
+% 
+%     phi = [phi1(1,:) phi2 phi3(1,:)];
+%     phid = [phi1(2,:) phid2 phi3(2,:)];
+%     phidd = [phi1(3,:) phidd2 phi3(3,:)];
+    z = [z1(1,:) z2];
+    zdd = [z1(3,:) zdd2];
+    
+    phi = [phi1(1,:) phi2];
+    phidd = [phi1(3,:) phidd2];
 
     gravity = g*ones(size(z));
     
@@ -82,24 +87,23 @@ function [c,ceq] = NL_bounds(x)
     y = y0 + cumtrapz(t,yd);
     
     % Bounds 
-    c = [  z_hover1-z_start;
-           z_hover2-z_end;
-           z_hover2-z_hover1;
-           max(z1(1,:))-z1_max;  % upper bound on the reaching phase
-           -min(z1(1,:))+z1_min;  % lower bound on the reaching phase
-           max(z2(1,:))-z2_max;  % upper bound on the flipping phase
-           -min(z2(1,:))+z2_min;  % lower bound on the flipping phase
-           max(z3(1,:))-z3_max;  % upper bound on the recovery phase
-           -min(z3(1,:))+z3_min;  % lower bound on the recovery phase
-           -min(y) + y_min;       % lower bound on the y trajectory
-           max(y) - y_max;       % upper bound on the y trajectory
+    c = [  z_hover1 - z_start;
+           z_end - z_start;
+           % max(z1(1,:))-z1_max;  % upper bound on the reaching phase
+           % -min(z1(1,:))+z1_min;  % lower bound on the reaching phase
+           %  max(z2(1,:))-z2_max;  % upper bound on the flipping phase
+           % -min(z2(1,:))+z2_min;  % lower bound on the flipping phase
+           % max(z3(1,:))-z3_max;  % upper bound on the recovery phase
+           %-min(z3(1,:))+z3_min;  % lower bound on the recovery phase
+           %-min(y) + y_min;       % lower bound on the y trajectory
+           % max(y) - y_max;       % upper bound on the y trajectory
            -min(u1) + u1_min;     % lower bound on u1 (u1>=0)
-           max(u1) - u1_max;     % upper bound on u1 (u1<=u1 max)
-           %-min(u2)+u2_min];       % lower bound on u2 (u2>=-u2_max)
+            max(u1) - u1_max];     % upper bound on u1 (u1<=u1 max)
+           %-min(u2)+u2_min;       % lower bound on u2 (u2>=-u2_max)
            % max(u2)-u2_max;       % upper bound on u2 (u2<=u2_max)
-           -min(phi);             % lower bound on phi
-            max(phi)-2*pi;        % upper bound on phi
-           -4*pi-min(phid);       % lower bound on thetad (thetad >= thetad_min) (angular velocity for aggressive maneuvers is around 720 deg/s)
-            max(phid)-4*pi ];     % upper bound on thetad (thetad <= thetad_max) (angular velocity for aggressive maneuvers is around 720 deg/s)
+           %-min(phi);             % lower bound on phi
+           % max(phi)-2*pi;        % upper bound on phi
+           %-4*pi-min(phid);       % lower bound on thetad (thetad >= thetad_min) (angular velocity for aggressive maneuvers is around 720 deg/s)
+           % max(phid)-4*pi ];     % upper bound on thetad (thetad <= thetad_max) (angular velocity for aggressive maneuvers is around 720 deg/s)
 end
 

@@ -27,50 +27,41 @@ phidd2 = polyval(coeff_phidd2,t_step:t_step:t2);
 
 %% Recovery phase
 
-z3_start = [z_end ((z_start-z_end)/t2-g*t2/2) -g 0 0];
-z3_end = [z_hover2 0 0 0 0];
-z3 = trajectory(z3_start,z3_end,t3);
-
-phi3_start = [phi_end (phi_end-phi_start)/t2 0 0 0];
-phi3_end = [2*flips*pi 0 0 0 0];
-phi3 = trajectory(phi3_start,phi3_end,t3);
+% z3_start = [z_end ((z_start-z_end)/t2-g*t2/2) -g 0 0];
+% z3_end = [z_hover2 0 0 0 0];
+% z3 = trajectory(z3_start,z3_end,t3);
+% 
+% phi3_start = [phi_end (phi_end-phi_start)/t2 0 0 0];
+% phi3_end = [2*flips*pi 0 0 0 0];
+% phi3 = trajectory(phi3_start,phi3_end,t3);
 
 %% Global trajectory
 
-z = [z1(1,:) z2 z3(1,:)];
-zd = [z1(2,:) zd2 z3(2,:)];
-zdd = [z1(3,:) zdd2 z3(3,:)];
+% z = [z1(1,:) z2 z3(1,:)];
+% zd = [z1(2,:) zd2 z3(2,:)];
+% zdd = [z1(3,:) zdd2 z3(3,:)];
+% 
+% phi = [phi1(1,:) phi2 phi3(1,:)];
+% phid = [phi1(2,:) phid2 phi3(2,:)];
+% phidd = [phi1(3,:) phidd2 phi3(3,:)];
 
-phi = [phi1(1,:) phi2 phi3(1,:)];
-phid = [phi1(2,:) phid2 phi3(2,:)];
-phidd = [phi1(3,:) phidd2 phi3(3,:)];
+z = [z1(1,:) z2];
+zdd = [z1(3,:) zdd2];
+
+phi = [phi1(1,:) phi2];
+phidd = [phi1(3,:) phidd2];
 
 gravity = g*ones(size(z));
 
-% t_Steps = 0.01:0.01:t1+t2+t3;
-
-n = length(zdd);
-
-t_steps = linspace(0,t1+t2+t3,n);
-
 ydd = -tan(phi).*(zdd + gravity);
-
-
-% %% manual numerical integration (very bad)
-% yd = integrate(ydd,0);
-% y = integrate(yd,0);
-
-% %% numerical integration with (cumtrapz)
-% yd0 = 0; % initial condition for yd
-% y0  = 0; % initial condition for y
-% yd = yd0 + cumtrapz(t_Steps,ydd);
-% y = y0 + cumtrapz(t_Steps,yd);
-
 
 %% integrate ydd to obtain yd
 
 total_time = t1+t2+t3;
 n = length(zdd);
+
+t_steps = linspace(0,t1+t2+t3,n);
+
 
 gt = linspace(0,total_time,n);  % function evaluation times
 g = -tan(phi).*(zdd + gravity); % function: ydd = g = -tan(phi).*(zdd + gravity)
@@ -90,11 +81,15 @@ y0 = 0; % initial condition
 [T_y,y] = ode45(@(T_y,y) myode_yd(T_y,ht,h), t_steps, y0);
 
 y = y.';
-%% calculate the required thrust u1 and torque u2 throughout the trajectory
+
+
+
 
 u1 = m*(zdd+gravity)./cos(phi);
 u2 = Ixx*phidd;
 
+
+% 
 % M = [1 1; 
 %     l -l];
 % 
