@@ -38,4 +38,5 @@ for i = 1:10:length(y)
    
 end
 title('Planar flipping trajectory'), daspect([1 1 1]), grid;
-
+xlabel('x[m]')
+ylabel('y[m]')

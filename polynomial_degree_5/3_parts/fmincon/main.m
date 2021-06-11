@@ -12,7 +12,7 @@ Ixx =  1.657171e-05; % Inertia
 l = 0.046; % arm length
 
 % Constants
-t_step = 0.01; % 100 Hz
+t_step = 0.05; % 100 Hz
 g = 9.81; % m/s^2
 
 % Bounds on the z trajectory of the reaching phase
@@ -54,7 +54,7 @@ t1_min = 0.1;
 t1_max = inf;
 
 % bounds on t2 (time of the flipping phase trajectory)
-t2_min = 0.05;
+t2_min = 0.1;
 t2_max = inf;
 
 % bounds on t3 (time of the recovery phase trajectory)
@@ -77,7 +77,7 @@ min_time = @objective_function;
 
 % Initial condition
 % x0 = [3.1 3.4 1.5 1.1 pi/2-0.2 (3/2+0.2)*flips*pi 0.2 2 0.2]
-x0 = [ 1    1.49    1.3    1.0    pi/2-0.2    (3/2+0.2)*flips*pi    0.4   0.3  0.4 ];
+x0 = [ 1.3    1.49    1.1    0.8    pi/2-0.2    (3/2+0.2)*flips*pi    0.4   0.3  0.4 ];
 options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
                     1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
 
@@ -89,16 +89,32 @@ z_end       = solution(3);
 z_hover2    = solution(4);
 phi_start   = solution(5);
 phi_end     = solution(6);
-t1          = solution(7);
-t2          = solution(8);
-t3          = solution(9);
-% t1          = round(solution(7),2);
-% t2          = round(solution(8),2);
-% t3          = round(solution(9),2);
+% t1          = solution(7);
+% t2          = solution(8);
+% t3          = solution(9);
+t1          = round(solution(7),2);
+t2          = round(solution(8),2);
+t3          = round(solution(9),2);
 
 %% Visualize results
 
 build_trajectory;
 visualize_results;
-% visualize_trajectory;
+visualize_trajectory;
+
+%% Write trajectory to file
+
+py = y';
+pz = z';
+roll = phi';
+vy = yd;
+vz = zd';
+rolld = phid';
+
+ref_X = [py pz roll vy vz rolld];
+ref_U = [u1' u2'];
+%% 
+dlmwrite('saved_data/measX.csv',ref_X);
+dlmwrite('saved_data/simU.csv',ref_U);
+
 

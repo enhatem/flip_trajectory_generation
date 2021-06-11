@@ -65,6 +65,7 @@ function [c,ceq] = NL_bounds_simple(x)
     zdd = [z1(3,:) zdd2];
     
     phi = [phi1(1,:) phi2];
+    phid = [phi1(2,:) phid2];
     phidd = [phi1(3,:) phidd2];
 
     gravity = g*ones(size(z));
@@ -88,14 +89,14 @@ function [c,ceq] = NL_bounds_simple(x)
     
     % Bounds 
     c = [  z_hover1 - z_start;
-           z_end - z_start;
+           % z_end - z_start;
            % max(z1(1,:))-z1_max;  % upper bound on the reaching phase
            % -min(z1(1,:))+z1_min;  % lower bound on the reaching phase
-           %  max(z2(1,:))-z2_max;  % upper bound on the flipping phase
+           % max(z2(1,:))-z2_max;  % upper bound on the flipping phase
            % -min(z2(1,:))+z2_min;  % lower bound on the flipping phase
            % max(z3(1,:))-z3_max;  % upper bound on the recovery phase
-           %-min(z3(1,:))+z3_min;  % lower bound on the recovery phase
-           %-min(y) + y_min;       % lower bound on the y trajectory
+           % -min(z3(1,:))+z3_min;  % lower bound on the recovery phase
+           % -min(y) + y_min;       % lower bound on the y trajectory
            % max(y) - y_max;       % upper bound on the y trajectory
            -min(u1) + u1_min;     % lower bound on u1 (u1>=0)
             max(u1) - u1_max];     % upper bound on u1 (u1<=u1 max)

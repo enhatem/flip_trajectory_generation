@@ -75,7 +75,10 @@ function [c,ceq] = NL_bounds(x)
     
     % Bounds 
     
-    c = [   max(z1(1,:))-z1_max;     % upper bound on the reaching phase
+    c = [   z_hover1 - z_start;
+            z_end - z_start;
+            z_hover2 - z_end;
+            max(z1(1,:))-z1_max;     % upper bound on the reaching phase
            -min(z1(1,:))+z1_min;     % lower bound on the reaching phase
             max(z2(1,:))-z2_max;     % upper bound on the flipping phase
            -min(z2(1,:))+z2_min;     % lower bound on the flipping phase

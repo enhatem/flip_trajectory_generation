@@ -14,4 +14,4 @@ options = optimoptions(options,'Display', 'iter');
 options = optimoptions(options,'PlotFcn',{@gaplotbestf,@gaplotstopping});
 % options = optimoptions(options,'PlotFcn', { @gaplotbestf });
 [x,fval,exitflag,output,population,score] = ...
-ga(@objective_function,nvars,[],[],[],[],lb,ub,@NL_bounds_simple,[],options);
+ga(@objective_function,nvars,[],[],[],[],lb,ub,@NL_bounds,[],options);

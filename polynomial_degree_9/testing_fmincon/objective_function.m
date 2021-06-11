@@ -99,7 +99,7 @@ function J = objective_function(x)
 % 
 %     % J = trapz(t,z)^2 + trapz(t,y)^2 + trapz(t,u1)^2;
 %     
-    J = trapz(t,y)^2 + trapz(t,z)^2 + 50*trapz(t,u1)^2;
+    J = trapz(t,y)^2 + trapz(t,z)^2 + trapz(t,u1)^2;
     
     % objective function: J = t1 + t2 + t3
     % J = trapz(t,u1); % x(7) + x(8) + x(9);
