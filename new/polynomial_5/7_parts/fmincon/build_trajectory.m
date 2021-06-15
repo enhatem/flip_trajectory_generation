@@ -114,7 +114,7 @@ ylabel('\phi[rad]')
 
 %% removing the identical points
 
-% For z
+%For z
 traj2_z = traj2_z(:,2:end); % removes the common point between the 2 consecutive trajectories
 traj3_z = traj3_z(:,2:end); % removes the common point between the 2 consecutive trajectories
 traj4_z = traj4_z(:,2:end); % removes the common point between the 2 consecutive trajectories
@@ -168,13 +168,36 @@ yd = yd0 + cumtrapz(T,ydd);
 % Calculation of y
 y = y0 + cumtrapz(T,yd);
 
-plot(T,y,'LineWidth',1.5)
+figure, plot(T,y,'LineWidth',1.5)
 title('Trajectory of y(t)')
 xlabel('time[s]')
 ylabel('y[m]')
 
 
-figure, plot(y,z,'LineWidth',1.5)
+figure, plot(y,z,'LineWidth',1.5), hold on
+
+r = 0.02;
+l = 0.05;
+
+for i = 1:10:length(y)
+    
+   t = phi(i);
+   
+   q1 = y(i)-l*cos(t);
+   q2 = y(i)+l*cos(t);
+   w1 = z(i)-l*sin(t);
+   w2 = z(i)+l*sin(t);
+   
+   r1y = q1+r*cos(t+pi/2);
+   r1z = w1+r*sin(t+pi/2);
+   r2y = q2+r*cos(t+pi/2);
+   r2z = w2+r*sin(t+pi/2);
+
+   plot([q1 q2],[w1 w2],'k','LineWidth',1.5), hold on
+   plot([q1 r1y],[w1 r1z],'k','LineWidth',1.5), hold on
+   plot([q2 r2y],[w2 r2z],'k','LineWidth',1.5), hold on
+   
+end
 title('Planar trajectory along the y-z axes')
 xlabel('y[m]')
 ylabel('z[m]')

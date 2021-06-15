@@ -210,3 +210,4 @@ t7      = round(x(37),2);
 
 %% Building trajectory
 build_trajectory;
+%visualize_trajectory;
