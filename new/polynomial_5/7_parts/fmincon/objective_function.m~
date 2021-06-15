@@ -1,10 +1,6 @@
-function [c,ceq] = nonlinear_bounds(x)
-%nonlinear_bounds extracts the nonlinear bounds that will be used in the
-%optimization problem.
-
-    global g t_step m u1_max 
-
-    ceq = []; % no equality constraints
+function J = objective_function(x)
+    
+    global g t_step m 
     
     z1      = x(1);
     z2      = x(2);
@@ -134,10 +130,10 @@ function [c,ceq] = nonlinear_bounds(x)
     traj7_phi = traj7_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
     
     %% Building the z and phi trajectories
-    T = 0:t_step:t1+t2+t3+t4+t5+t6+t7;
+    % T = 0:t_step:t1+t2+t3+t4+t5+t6+t7;
     z = [traj1_z(1,:) traj2_z(1,:) traj3_z(1,:) traj4_z(1,:) traj5_z(1,:) traj6_z(1,:) traj7_z(1,:)];
     phi = [traj1_phi(1,:) traj2_phi(1,:) traj3_phi(1,:) traj4_phi(1,:) traj5_phi(1,:) traj6_phi(1,:) traj7_phi(1,:)];
-
+    
     %% Calculating the thrust u1 along the trajectory
 
     zdd = [traj1_z(3,:) traj2_z(3,:) traj3_z(3,:) traj4_z(3,:) traj5_z(3,:) traj6_z(3,:) traj7_z(3,:)];
@@ -145,30 +141,24 @@ function [c,ceq] = nonlinear_bounds(x)
     gravity = g*ones(size(z));
 
     u1 = m*(zdd+gravity)./cos(phi);
-    
+    T = linspace(0,t1+t2+t3+t4+t5+t6+t7,length(z));
     %% Calculating the trajectory along y
 
     % Calculation of ydd
-    % ydd = -tan(phi).*(zdd + gravity);
+    ydd = -tan(phi).*(zdd + gravity);
 
     % Initial conditions for yd and y
-    % yd0 = 0; % initial condition for yd
-    % y0  = 0; % initial condition for y
+    yd0 = 0; % initial condition for yd
+    y0  = 0; % initial condition for y
 
     % Calculation of yd
-    % yd = yd0 + cumtrapz(T,ydd);
+    yd = yd0 + cumtrapz(T,ydd);
 
     % Calculation of y
-    % y = y0 + cumtrapz(T,yd);
+    y = y0 + cumtrapz(T,yd);
     
-    % Bounds
-    c = [   %phi2 - phi3;
-            %phi3 - phi4;
-            %-min(traj2_phi(1,:))+max(traj1_phi(1,:));
-            %-min(traj3_phi(1,:))+max(traj1_phi(1,:));
-            %-min(traj4_phi(1,:))+max(traj3_phi(1,:));
-            -min(u1);           % lower bound on u1 (u1>=0)
-            max(u1)-u1_max ];    % upper bound on u1 (u1<=u1 max)
     
+    % An option could be to add the integral of phi^2
+    % J = trapz(T,y)^2 + trapz(T,z)^2 + trapz(T,phi)^2 + 50*trapz(T,u1)^2;
+    J = trapz() trapz(T,u1)^2;
 end
-

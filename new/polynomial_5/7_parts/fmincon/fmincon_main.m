@@ -108,23 +108,105 @@ obj = @objective_function;
 %% Optimization problem
 
 % Initial condition
-x0 = [ 1.1    1.49    1.1    0.8    pi/2-0.2    (3/2+0.2)*pi    0.4   0.3  0.4 ];
+% For z
+z1 = 1.0; % initial position
+z2 = 1.2; % z at the end of the first trajectory (reaching phase)
+z3 = 1.4; % z at the end of the second trajectory (reaching phase)
+z4 = 1.6; % z at the end of the third trajectory (end of reaching phase, beginning of flip phase)
+z5 = 1.5; % z at the end of the fourth trajectory (end of flip phase)
+z6 = 1.3; % z at the end of the fifth trajectory (recovery phase)
+z7 = 1.2; % z at the end of the sixth trajectory (recovery phase)
+z8 = 0.9; % z at the end of the seventh trajectory (recovery phase)
+
+% Velocities along z
+z2d = 1 ; % Velocity of the first waypoint in the reaching phase
+z3d = 1 ; % Velocity of the second waypoint in the reaching phase
+z6d = 1 ; % Velocity of the first waypoint in the recovery phase
+z7d = 1 ; % Velocity of the second waypoint in the recovery phase
+
+% Accelerations along z
+z2dd = 1; % Acceleration of the first waypoint in the reaching phase
+z3dd = 1; % Acceleration of the second waypoint in the reaching phase
+z6dd = 1; % Acceleration of the first waypoint in the recovery phase
+z7dd = 1; % Acceleration of the second waypoint in the recovery phase
+
+% For phi
+phi1 = 0; % fixed
+phi2 = D2R(28.33); % phi at the end of the first trajectory (reaching phase)
+phi3 = D2R(56.67); % phi at the end of the second trajectory (reaching phase)
+phi4 = pi/2 - 0.1; % phi at the end of the third trajectory (end of reaching phase, beginning of flip phase)
+phi5 = (3/2)* pi + 0.1; % phi at the end of the fourth trajectory (end of flip phase)
+phi6 = D2R(303.33); % phi at the end of the fifth trajectory (recovery phase)
+phi7 = D2R(331.66); % phi at the end of the sixth trajectory (recovery phase)
+phi8 = D2R(2*pi); % phi at the end of the seventh trajectory (recovery phase)
+
+% Angular velocities
+phi2d = 1; % Angular velocity of the first waypoint in the reaching phase
+phi3d = 1; % Angular velocity of the second waypoint in the reaching phase
+phi6d = 1; % Angular velocity of the first waypoint in the recovery phase
+phi7d = 1; % Angular velocity of the second waypoint in the recovery phase
+
+% Angular accelerations
+phi2dd = 1; % Angular acceleration of the first waypoint in the reaching phase
+phi3dd = 1; % Angular acceleration of the second waypoint in the reaching phase
+phi6dd = 1; % Angular acceleration of the first waypoint in the recovery phase
+phi7dd = 1; % Angular acceleration of the second waypoint in the recovery phase
+
+% For the time for each trajectory
+t1 = 0.3; % time of the first trajectory (reaching phase)
+t2 = 0.3; % time of the second trajectory (reaching phase)
+t3 = 0.3; % time of the third trajectory (reaching phase)
+t4 = 0.3; % time of the fourth trajectory (flip phase)
+t5 = 0.3; % time of the fifth trajectory (recovery phase)
+t6 = 0.3; % time of the sixth trajectory (recovery phase)
+t7 = 0.3; % time of the seventh trajectory (recovery phase)
+
+
+x0 = [ z1 z2 z3 z4 z5 z6 z7 z8 z2d z3d z6d z7d z2dd z3dd z6dd z7dd phi2 phi3 phi4 phi5 phi6 phi7 phi2d phi3d phi6d phi7d phi2dd phi3dd phi6dd phi7dd t1 t2 t3 t4 t5 t6 t7];
 options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
                     1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
 
-solution = fmincon(obj,x0,[],[],[],[],lb,ub,nl_con,options);
+% fmincon optimization
+x = fmincon(obj,x0,[],[],[],[],lb,ub,nl_con,options);
 
-z1 = solution(1);
-z2 = solution(2);
-z3 = solution(3);
-z4 = solution(4);
-phi_start = solution(5);
-phi_end   = solution(6);
-t1 = round(solution(7),2);
-t2 = round(solution(8),2);
-t3 = round(solution(9),2);
+% solution of the optimization problem
+z1      = x(1);
+z2      = x(2);
+z3      = x(3);
+z4      = x(4);
+z5      = x(5);
+z6      = x(6);
+z7      = x(7);
+z8      = x(8);
+z2d     = x(9);
+z3d     = x(10);
+z6d     = x(11);
+z7d     = x(12);
+z2dd    = x(13);
+z3dd    = x(14);
+z6dd    = x(15);
+z7dd    = x(16);
+phi2    = x(17);
+phi3    = x(18);
+phi4    = x(19);
+phi5    = x(20);
+phi6    = x(21);
+phi7    = x(22);
+phi2d   = x(23);
+phi3d   = x(24);
+phi6d   = x(25);
+phi7d   = x(26);
+phi2dd  = x(27);
+phi3dd  = x(28);
+phi6dd  = x(29);
+phi7dd  = x(30);
+t1      = round(x(31),2);
+t2      = round(x(32),2);
+t3      = round(x(33),2);
+t4      = round(x(34),2);
+t5      = round(x(35),2);
+t6      = round(x(36),2);
+t7      = round(x(37),2);
 
 %% Building trajectory
-
 build_trajectory;
-plot_data;
