@@ -97,7 +97,7 @@ function [c,ceq] = nonlinear_bounds(x)
     % Bounds 
     
     c = [ -min(u1);           % lower bound on u1 (u1>=0)
-           max(u1)-0.24 ];    % upper bound on u1 (u1<=u1 max)
+           max(u1)-u1_max ];    % upper bound on u1 (u1<=u1 max)
     
 end
 

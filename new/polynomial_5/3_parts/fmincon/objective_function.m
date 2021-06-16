@@ -109,6 +109,6 @@ function J = objective_function(x)
     
     
     % An option could be to add the integral of phi^2
-    % J = trapz(T,y)^2 + trapz(T,z)^2 + trapz(T,phi)^2 + 50*trapz(T,u1)^2;
-    J = trapz(T,u1)^2;
+    J = trapz(T,y)^2 + trapz(T,z)^2 + 40000*trapz(T,u1)^2;
+    % J = 90000*trapz(T,u1)^2;
 end

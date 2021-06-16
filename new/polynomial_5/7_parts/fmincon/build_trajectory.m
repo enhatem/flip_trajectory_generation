@@ -134,6 +134,9 @@ traj7_phi = traj7_phi(:,2:end); % removes the common point between the 2 consecu
 T = 0:t_step:t1+t2+t3+t4+t5+t6+t7;
 z = [traj1_z(1,:) traj2_z(1,:) traj3_z(1,:) traj4_z(1,:) traj5_z(1,:) traj6_z(1,:) traj7_z(1,:)];
 phi = [traj1_phi(1,:) traj2_phi(1,:) traj3_phi(1,:) traj4_phi(1,:) traj5_phi(1,:) traj6_phi(1,:) traj7_phi(1,:)];
+phid = [traj1_phi(2,:) traj2_phi(2,:) traj3_phi(2,:) traj4_phi(2,:) traj5_phi(2,:) traj6_phi(2,:) traj7_phi(2,:)];
+phidd = [traj1_phi(3,:) traj2_phi(3,:) traj3_phi(3,:) traj4_phi(3,:) traj5_phi(3,:) traj6_phi(3,:) traj7_phi(3,:)];
+
 
 figure, plot(T,z, 'LineWidth',1.5)
 title('Trajectory along z(t)')
@@ -145,13 +148,15 @@ title('Trajectory along \phi(t)')
 xlabel('time[s]')
 ylabel('\phi[rad]')
 
-%% Calculating the thrust u1 along the trajectory
+%% Calculating the thrust u1  and Torque u2 along the trajectory
 
+zd  = [traj1_z(2,:) traj2_z(2,:) traj3_z(2,:) traj4_z(2,:) traj5_z(2,:) traj6_z(2,:) traj7_z(2,:)];
 zdd = [traj1_z(3,:) traj2_z(3,:) traj3_z(3,:) traj4_z(3,:) traj5_z(3,:) traj6_z(3,:) traj7_z(3,:)];
 
 gravity = g*ones(size(z));
 
 u1 = m*(zdd+gravity)./cos(phi);
+u2 = Ixx*phidd;
 
 %% Calculating the trajectory along y
 
