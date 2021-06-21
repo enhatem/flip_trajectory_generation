@@ -163,9 +163,11 @@ t7 = 0.3; % time of the seventh trajectory (recovery phase)
 
 
 x0 = [ z1 z2 z3 z4 z5 z6 z7 z8 z2d z3d z6d z7d z2dd z3dd z6dd z7dd phi2 phi3 phi4 phi5 phi6 phi7 phi2d phi3d phi6d phi7d phi2dd phi3dd phi6dd phi7dd t1 t2 t3 t4 t5 t6 t7];
-options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
-                    1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
+%options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
+%                    1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
 
+options  = optimset('Display', 'iter', 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
+                
 % fmincon optimization
 x = fmincon(obj,x0,[],[],[],[],lb,ub,nl_con,options);
 
@@ -214,16 +216,16 @@ build_trajectory;
 
 %% Write trajectory to file
 
-py = y';
-pz = z';
-roll = phi';
-vy = yd';
-vz = zd';
-rolld = phid';
-
-ref_X = [py pz roll vy vz rolld];
-ref_U = [u1' u2'];
-%% 
-dlmwrite('saved_data/measX.csv',ref_X);
-dlmwrite('saved_data/simU.csv',ref_U);
+% py = y';
+% pz = z';
+% roll = phi';
+% vy = yd';
+% vz = zd';
+% rolld = phid';
+% 
+% ref_X = [py pz roll vy vz rolld];
+% ref_U = [u1' u2'];
+% %% 
+% dlmwrite('saved_data/measX.csv',ref_X);
+% dlmwrite('saved_data/simU.csv',ref_U);
 

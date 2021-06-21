@@ -206,3 +206,10 @@ end
 title('Planar trajectory along the y-z axes')
 xlabel('y[m]')
 ylabel('z[m]')
+
+%% Plotting the thrust along the trajectory
+
+figure, plot(T,u1,'LineWidth',1.5)
+title('Thrust u1 along the trajectory')
+xlabel('time[s]')
+ylabel('u1[N]')
