@@ -215,6 +215,8 @@ build_trajectory;
 %visualize_trajectory;
 
 
-% objective funciton
-J = trapz(T,u1)^2;
+
+%% Obj function
+
+J = 50*trapz(T,u1)^2;
 

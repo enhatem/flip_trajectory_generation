@@ -1,104 +1,3 @@
-clear; close all; clc;
-
-%% Drone parameters and costants
-
-global t_step g;
-
-% Drone parameters
-m =  29e-3 / 2; % mass
-Ixx =  1.657171e-05; % Inertia
-l = 0.046; % arm length
-
-% Constants
-t_step =0.01;
-g = 9.81; % m/s^2
-
-%% Trajectory parameters (to be optimized)
-
-% For z
-z1  = 1.0; % Initial position (start of reaching phase)
-z2  = 1.1; % First intermediate waypoint(reaching phase)
-z3  = 1.2; % Second intermediate waypoint(reaching phase)
-z4  = 1.3; % Third intermediate waypoint(reaching phase)
-z5  = 1.4; % Fourth intermediate waypoint(reaching phase)
-z6  = 1.5; % Final position of the recovery phase (start of the flip phase)
-z7  = 1.4; % Final position of the flip phase (start of the recovery phase)
-z8  = 1.3; % First intermediate waypoint(recovery phase)
-z9  = 1.2; % Second intermediate waypoint(recovery phase)
-z10 = 1.1; % Third intermediate waypoint(recovery phase)
-z11 = 1.0; % Fourth intermediate waypoint(recovery phase)
-z12 = 0.9; % Final position (end of recovery phase)
-
-% Velocities along z
-z2d  = 1; % Velocity of the first waypoint in the reaching phase
-z3d  = 1; % Velocity of the second waypoint in the reaching phase
-z4d  = 1; % Velocity of the third waypoint in the reaching phase
-z5d  = 1; % Velocity of the fourth waypoint in the reaching phase
-z8d  = 1; % Velocity of the first waypoint in the recovery phase
-z9d  = 1; % Velocity of the second waypoint in the recovery phase
-z10d = 1; % Velocity of the third waypoint in the recovery phase
-z11d = 1; % Velocity of the fourth waypoint in the recovery phase
-
-
-% Accelerations along z
-z2dd  = 1; % Acceleration of the first waypoint in the reaching phase
-z3dd  = 1; % Acceleration of the second waypoint in the reaching phase
-z4dd  = 1; % Acceleration of the third waypoint in the reaching phase
-z5dd  = 1; % Acceleration of the fourth waypoint in the reaching phase
-z8dd  = 1; % Acceleration of the first waypoint in the recovery phase
-z9dd  = 1; % Acceleration of the second waypoint in the recovery phase
-z10dd = 1; % Acceleration of the third waypoint in the recovery phase
-z11dd = 1; % Acceleration of the fourth waypoint in the recovery phase
-
-% For phi
-phi1  = 0; % fixed
-phi2  = D2R(17.5);  % First intermediate waypoint (reaching phase)
-phi3  = D2R(35);    % Second intermediate waypoint (reaching phase)
-phi4  = D2R(52.5);  % third intermediate waypoint (reaching phase)
-phi5  = D2R(70);    % Fourth intermediate waypoint (reaching phase)
-phi6  = pi/2 - 0.1; % Final position in the reaching phase (start of flip)
-phi7  = (3/2)* pi + 0.1; % End of flip (start of recovery phase)
-phi8  = D2R(287.5); % First intermediate waypoint (recovery phase)
-phi9  = D2R(305);   % Second intermediate waypoint (recovery phase)
-phi10 = D2R(322.5); % Third intermediate waypoint (recovery phase)
-phi11 = D2R(340);   % Fourth intermediate waypoint (recovery phase)
-phi12 = 2 * pi;     % Final position (end of recovery phase)
-
-
-% Angular velocities along phi
-phi2d  = 1; % Angular velocity of the first waypoint in the reaching phase
-phi3d  = 1; % Angular velocity of the second waypoint in the reaching phase
-phi4d  = 1; % Angular velocity of the third waypoint in the reaching phase
-phi5d  = 1; % Angular velocity of the fourth waypoint in the reaching phase
-phi8d  = 1; % Angular velocity of the first waypoint in the recovery phase
-phi9d  = 1; % Angular velocity of the second waypoint in the recovery phase
-phi10d = 1; % Angular velocity of the third waypoint in the recovery phase
-phi11d = 1; % Angular velocity of the fourth waypoint in the recovery phase
-
-
-% Angular accelerations along phi
-phi2dd  = 1; % Angular acceleration of the first waypoint in the reaching phase
-phi3dd  = 1; % Angular acceleration of the second waypoint in the reaching phase
-phi4dd  = 1; % Angular acceleration of the third waypoint in the reaching phase
-phi5dd  = 1; % Angular acceleration of the fourth waypoint in the reaching phase
-phi8dd  = 1; % Angular acceleration of the first waypoint in the recovery phase
-phi9dd  = 1; % Angular acceleration of the second waypoint in the recovery phase
-phi10dd = 1; % Angular acceleration of the third waypoint in the recovery phase
-phi11dd = 1; % Angular acceleration of the fourth waypoint in the recovery phase
-
-% For the time for each trajectory
-t1  = 0.2; % time of the first trajectory (reaching phase)
-t2  = 0.2; % time of the second trajectory (reaching phase)
-t3  = 0.2; % time of the third trajectory (reaching phase)
-t4  = 0.2; % time of the fourth trajectory (reaching phase)
-t5  = 0.2; % time of the fifth trajectory (reaching phase)
-t6  = 0.2; % time of the flip trajectory
-t7  = 0.2; % time of the first trajectory (recovery phase)
-t8  = 0.2; % time of the second trajectory (recovery phase)
-t9  = 0.2; % time of the third trajectory (recovery phase)
-t10 = 0.2; % time of the fourth trajectory (recovery phase)
-t11 = 0.2; % time of the fifth trajectory (recovery phase)
-
 %% Trajectory waypoints for the z trajectory
 
 % For z
@@ -322,3 +221,8 @@ figure, plot(y,z,'LineWidth',1.5)
 title('Planar trajectory along the y-z axes')
 xlabel('y[m]')
 ylabel('z[m]')
+
+figure, plot(T, u1, 'LineWidth', 1.5)
+title('Thrust throughout the trajectory')
+xlabel('time[s]')
+ylabel('u1[N]')
