@@ -224,22 +224,22 @@ function J = objective_function(x)
     
     % Generating the time vector that is required to integrate ydd
     T = linspace(0,t1+t2+t3+t4+t5+t6+t7,length(z));
-%     
-%     % Calculation of ydd
-%     ydd = -tan(phi).*(zdd + gravity);
-% 
-%     % Initial conditions for yd and y
-%     yd0 = 0; % initial condition for yd
-%     y0  = 0; % initial condition for y
-% 
-%     % Calculation of yd
-%     yd = yd0 + cumtrapz(T,ydd);
-% 
-%     % Calculation of y
-%     y = y0 + cumtrapz(T,yd);
+    
+    % Calculation of ydd
+    ydd = -tan(phi).*(zdd + gravity);
+
+    % Initial conditions for yd and y
+    yd0 = 0; % initial condition for yd
+    y0  = 0; % initial condition for y
+
+    % Calculation of yd
+    yd = yd0 + cumtrapz(T,ydd);
+
+    % Calculation of y
+    y = y0 + cumtrapz(T,yd);
     
     % An option could be to add the integral of phi^2
     % J = trapz(T,y)^2 + trapz(T,z)^2 + trapz(T,phi)^2 + 50*trapz(T,u1)^2;
-    % J = trapz(T,y)^2 + trapz(T,z)^2 + 20*trapz(T,u1)^2;
-    J = trapz(T,u1)^2;
+    J = trapz(T,y)^2 + trapz(T,z)^2 + trapz(T,u1)^2;
+    % J = trapz(T,u1)^2;
 end

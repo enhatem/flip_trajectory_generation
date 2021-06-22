@@ -162,11 +162,14 @@ function [c,ceq] = nonlinear_bounds(x)
     % y = y0 + cumtrapz(T,yd);
     
     % Bounds
-    c = [   %phi2 - phi3;
-            %phi3 - phi4;
-            %-min(traj2_phi(1,:))+max(traj1_phi(1,:));
-            %-min(traj3_phi(1,:))+max(traj1_phi(1,:));
-            %-min(traj4_phi(1,:))+max(traj3_phi(1,:));
+    c = [   z1 - z2;
+            z2 - z3;
+            z3 - z4;
+            z5 - z4;
+            z6 - z5;
+            z7 - z6;
+            z8 - z7;
+            z8 - z1;
             -min(u1);           % lower bound on u1 (u1>=0)
             max(u1)-u1_max ];    % upper bound on u1 (u1<=u1 max)
     

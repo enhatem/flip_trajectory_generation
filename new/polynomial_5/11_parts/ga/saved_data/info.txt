@@ -109,14 +109,14 @@ obj = @objective_function;
 
 % Initial condition
 % For z
-z1 = 1.2; % initial position
-z2 = 1.4; % z at the end of the first trajectory (reaching phase)
-z3 = 1.6; % z at the end of the second trajectory (reaching phase)
-z4 = 1.8; % z at the end of the third trajectory (end of reaching phase, beginning of flip phase)
-z5 = 1.2; % z at the end of the fourth trajectory (end of flip phase)
-z6 = 1.1; % z at the end of the fifth trajectory (recovery phase)
-z7 = 1.0; % z at the end of the sixth trajectory (recovery phase)
-z8 = 0.8; % z at the end of the seventh trajectory (recovery phase)
+z1 = 1.0; % initial position
+z2 = 1.2; % z at the end of the first trajectory (reaching phase)
+z3 = 1.4; % z at the end of the second trajectory (reaching phase)
+z4 = 1.6; % z at the end of the third trajectory (end of reaching phase, beginning of flip phase)
+z5 = 1.5; % z at the end of the fourth trajectory (end of flip phase)
+z6 = 1.3; % z at the end of the fifth trajectory (recovery phase)
+z7 = 1.2; % z at the end of the sixth trajectory (recovery phase)
+z8 = 0.9; % z at the end of the seventh trajectory (recovery phase)
 
 % Velocities along z
 z2d = 1 ; % Velocity of the first waypoint in the reaching phase
@@ -214,18 +214,9 @@ t7      = round(x(37),2);
 build_trajectory;
 %visualize_trajectory;
 
-%% Write trajectory to file
 
-py = y';
-pz = z';
-roll = phi';
-vy = yd';
-vz = zd';
-rolld = phid';
 
-ref_X = [py pz roll vy vz rolld];
-ref_U = [u1' u2'];
-%% 
-dlmwrite('saved_data/measX.csv',ref_X);
-dlmwrite('saved_data/simU.csv',ref_U);
+%% Obj function
+
+J = 50*trapz(T,u1)^2;
 

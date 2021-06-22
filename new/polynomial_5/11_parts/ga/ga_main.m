@@ -207,13 +207,22 @@ t10 = 0.5; % time of the fourth trajectory (recovery phase)
 t11 = 0.5; % time of the fifth trajectory (recovery phase)
 %%
 x0 = [ z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z2d z3d z4d z5d z8d z9d z10d z11d z2dd z3dd z4dd z5dd z8dd z9dd z10dd z11dd phi2 phi3 phi4 phi5 phi6 phi7 phi8 phi9 phi10 phi11 phi2d phi3d phi4d phi5d phi8d phi9d phi10d phi11d phi2dd phi3dd phi4dd phi5dd phi8dd phi9dd phi10dd phi11dd t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11];
+
+nvar = size(x0,2);
+
 %options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
 %                    1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
 
-options  = optimset('Display', 'iter', 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
-                
+% options  = optimset('Display', 'iter', 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
+options = optimoptions('ga');
+options = optimoptions(options,'Display', 'iter');
+options = optimoptions(options,'PlotFcn',{@gaplotbestf,@gaplotstopping});  
+
+% Setting the seed 
+rng default % For reproducibility
+
 % fmincon optimization
-x = fmincon(obj,x0,[],[],[],[],lb,ub,nl_con,options);
+x = ga(obj,nvar,[],[],[],[],lb,ub,nl_con,[],options);
 
 % solution of the optimization problem
 z1      = x(1);

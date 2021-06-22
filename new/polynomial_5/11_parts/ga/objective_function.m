@@ -1,10 +1,6 @@
-function [c,ceq] = nonlinear_bounds(x)
-%nonlinear_bounds extracts the nonlinear bounds that will be used in the
-%optimization problem.
-
-    global g t_step m u1_max 
-
-    ceq = []; % no equality constraints
+function J = objective_function(x)
+    
+    global g t_step m 
     
     z1      = x(1);
     z2      = x(2);
@@ -77,9 +73,6 @@ function [c,ceq] = nonlinear_bounds(x)
     t9      = x(63);
     t10     = x(64);
     t11     = x(65);
-    
-
-    %% Trajectory waypoints for the z trajectory
 
     %% Trajectory waypoints for the z trajectory
 
@@ -114,7 +107,6 @@ function [c,ceq] = nonlinear_bounds(x)
     PHI11 = [phi11 phi11d phi11dd]; % Fourth waypoint in the recovery phase
 
     PHI12 = [2*pi 0 0]; % Final position in the recovery phase
-
 
     %% Reaching phase
 
@@ -193,65 +185,61 @@ function [c,ceq] = nonlinear_bounds(x)
     %% removing the identical points
 
     % For z
-traj2_z = traj2_z(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj3_z = traj3_z(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj4_z = traj4_z(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj5_z = traj5_z(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj6_z = traj6_z(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj7_z = traj7_z(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj8_z = traj8_z(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj9_z = traj9_z(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj10_z = traj10_z(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj11_z = traj11_z(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj2_z = traj2_z(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj3_z = traj3_z(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj4_z = traj4_z(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj5_z = traj5_z(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj6_z = traj6_z(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj7_z = traj7_z(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj8_z = traj8_z(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj9_z = traj9_z(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj10_z = traj10_z(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj11_z = traj11_z(:,2:end); % removes the common point between the 2 consecutive trajectories
 
-% For phi
-traj2_phi  = traj2_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj3_phi  = traj3_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj4_phi  = traj4_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj5_phi  = traj5_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj6_phi  = traj6_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj7_phi  = traj7_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj8_phi  = traj8_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj9_phi  = traj9_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj10_phi = traj10_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
-traj11_phi = traj11_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
+    % For phi
+    traj2_phi  = traj2_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj3_phi  = traj3_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj4_phi  = traj4_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj5_phi  = traj5_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj6_phi  = traj6_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj7_phi  = traj7_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj8_phi  = traj8_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj9_phi  = traj9_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj10_phi = traj10_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
+    traj11_phi = traj11_phi(:,2:end); % removes the common point between the 2 consecutive trajectories
     
     %% Building the z and phi trajectories
-    T = 0:t_step:t1+t2+t3+t4+t5+t6+t7;
-    z = [traj1_z(1,:) traj2_z(1,:) traj3_z(1,:) traj4_z(1,:) traj5_z(1,:) traj6_z(1,:) traj7_z(1,:)];
-    phi = [traj1_phi(1,:) traj2_phi(1,:) traj3_phi(1,:) traj4_phi(1,:) traj5_phi(1,:) traj6_phi(1,:) traj7_phi(1,:)];
-
+    
+    T = 0:t_step:t1+t2+t3+t4+t5+t6+t7+t8+t9+t10+t11;
+    z = [traj1_z(1,:) traj2_z(1,:) traj3_z(1,:) traj4_z(1,:) traj5_z(1,:) traj6_z(1,:) traj7_z(1,:) traj8_z(1,:) traj9_z(1,:) traj10_z(1,:) traj11_z(1,:)];
+    phi = [traj1_phi(1,:) traj2_phi(1,:) traj3_phi(1,:) traj4_phi(1,:) traj5_phi(1,:) traj6_phi(1,:) traj7_phi(1,:) traj8_phi(1,:) traj9_phi(1,:)  traj10_phi(1,:) traj11_phi(1,:)];
+ 
     %% Calculating the thrust u1 along the trajectory
-
-    zdd = [traj1_z(3,:) traj2_z(3,:) traj3_z(3,:) traj4_z(3,:) traj5_z(3,:) traj6_z(3,:) traj7_z(3,:)];
-
+    
+    zdd = [traj1_z(3,:) traj2_z(3,:) traj3_z(3,:) traj4_z(3,:) traj5_z(3,:) traj6_z(3,:) traj7_z(3,:) traj8_z(3,:) traj9_z(3,:) traj10_z(3,:) traj11_z(3,:)];
     gravity = g*ones(size(z));
-
     u1 = m*(zdd+gravity)./cos(phi);
     
     %% Calculating the trajectory along y
-
+    
+    % Generating the time vector that is required to integrate ydd
+    T = linspace(0,t1+t2+t3+t4+t5+t6+t7,length(z));
+    
     % Calculation of ydd
-    % ydd = -tan(phi).*(zdd + gravity);
+    ydd = -tan(phi).*(zdd + gravity);
 
     % Initial conditions for yd and y
-    % yd0 = 0; % initial condition for yd
-    % y0  = 0; % initial condition for y
+    yd0 = 0; % initial condition for yd
+    y0  = 0; % initial condition for y
 
     % Calculation of yd
-    % yd = yd0 + cumtrapz(T,ydd);
+    yd = yd0 + cumtrapz(T,ydd);
 
     % Calculation of y
-    % y = y0 + cumtrapz(T,yd);
+    y = y0 + cumtrapz(T,yd);
     
-    % Bounds
-    c = [   %phi2 - phi3;
-            %phi3 - phi4;
-            %-min(traj2_phi(1,:))+max(traj1_phi(1,:));
-            %-min(traj3_phi(1,:))+max(traj1_phi(1,:));
-            %-min(traj4_phi(1,:))+max(traj3_phi(1,:));
-            -min(u1);           % lower bound on u1 (u1>=0)
-            max(u1)-u1_max ];    % upper bound on u1 (u1<=u1 max)
-    
+    % An option could be to add the integral of phi^2
+    % J = trapz(T,y)^2 + trapz(T,z)^2 + trapz(T,phi)^2 + 50*trapz(T,u1)^2;
+    % J = trapz(T,y)^2 + 0.1*trapz(T,z)^2 + 100*trapz(T,u1)^2;
+    J = trapz(T,u1)^2;
 end
-
