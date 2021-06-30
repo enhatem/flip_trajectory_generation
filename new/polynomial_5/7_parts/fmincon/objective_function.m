@@ -158,7 +158,10 @@ function J = objective_function(x)
     y = y0 + cumtrapz(T,yd);
     
     % An option could be to add the integral of phi^2
-    % J = trapz(T,y)^2 + trapz(T,z)^2 + trapz(T,phi)^2 + 50*trapz(T,u1)^2;
-    J = trapz(T,y)^2 + 0.5*trapz(T,z)^2 + 50*trapz(T,u1)^2;
-    % J = trapz(T,u1)^2;
+    % J = trapz(T,y)^2 + 200*trapz(T,u1)^2 + (t1 +t2 +t3 +t4 +t5 +t6 +t7);
+    % J = 100*trapz(T,u1)^2 + t1 + t2 +t3 +t4 +t5 + t6 + t7;
+    % J  = trapz(T,u1)^2;
+    % J = 0.1*trapz(T,y)^2 + 0.1*trapz(T,z)^2 + 150*trapz(T,u1)^2 + (t1 + t2 +t3 +t4 +t5 + t6 + t7);
+    % J = trapz(T,y)^2 + trapz(T,z)^2 + 150*trapz(T,u1)^2;
+    J = trapz(T,u1)^2;
 end

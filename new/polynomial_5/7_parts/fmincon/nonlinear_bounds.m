@@ -2,7 +2,7 @@ function [c,ceq] = nonlinear_bounds(x)
 %nonlinear_bounds extracts the nonlinear bounds that will be used in the
 %optimization problem.
 
-    global g t_step m u1_max 
+    global g t_step m u1_max w_min w_max
 
     ceq = []; % no equality constraints
     
@@ -161,7 +161,50 @@ function [c,ceq] = nonlinear_bounds(x)
     % Calculation of y
     % y = y0 + cumtrapz(T,yd);
     
-    % Bounds
+    % extracting number of rows and columns from phi
+    [r, c] = size(phi');
+
+    % defining the theta and psi angles
+    theta = zeros(r,c);
+    psi = theta;
+
+    
+    
+%     %% Finding the angular rates
+%     
+%     % euler angles 
+%     euler = [ phi' , theta , psi ];
+% 
+%     quat = eul2quat(euler,'XYZ');
+% 
+%     % normalizing quat
+%     for i = 1:r
+%         qi = quat(i);
+%         qi_norm = sqrt(sum(qi)^2);
+%         quat(i) = 1 / qi_norm * qi;
+%     end
+% 
+%     % q_dot
+%     q_dot = diff(quat) / t_step;
+% 
+%     % angular rates computation
+%     w = zeros(r-1,4);
+%     for i=1:r-1
+%         qi = quat(i,:);
+%         q_dot_i = q_dot(i,:);
+%         temp = 2 * quatmultiply(q_dot_i, quatinv(qi));
+%         w(i,:) = temp;
+%     end
+% 
+%     % removing the unwanted column
+%     w = w(:,2:end);
+%     
+%     % extracting the angular rate on each axis
+%     wx = w(:,1);
+%     wy = w(:,2);
+%     wz = w(:,3);
+    
+    %% Bounds
     c = [   z1 - z2;
             z2 - z3;
             z3 - z4;
@@ -169,7 +212,8 @@ function [c,ceq] = nonlinear_bounds(x)
             z6 - z5;
             z7 - z6;
             z8 - z7;
-            z8 - z1;
+            % max(wx) - w_max;
+            % w_min - min(wx);
             -min(u1);           % lower bound on u1 (u1>=0)
             max(u1)-u1_max ];    % upper bound on u1 (u1<=u1 max)
     

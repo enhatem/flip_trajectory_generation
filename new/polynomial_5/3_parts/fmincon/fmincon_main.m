@@ -15,15 +15,15 @@ g = 9.81; % m/s^2
 
 % Bounds on the z trajectory of the reaching phase
 z1_min = 0.8;
-z1_max = 2;
+z1_max = 3;
 
 % Bounds on the z trajectory of the flipping phase
 z2_min = 0.8;
-z2_max = 2;
+z2_max = 3;
 
 % Bounds on the z trajectory of the recovery phase
 z3_min = 0.8;
-z3_max = 2;
+z3_max = 3;
 
 % Maximum thrust and torque reachable by the drone
 u1_max = 0.9 * ( ( 46e-3 * g ) / 2 ); % Maximum thrust 
@@ -68,9 +68,13 @@ obj = @objective_function;
 %% Optimization problem
 
 % Initial condition
-x0 = [ 1.1    1.49    1.1    0.8    pi/2-0.2    (3/2+0.2)*pi    0.4   0.3  0.4 ];
-options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
-                    1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
+% x0 = [ 0.9    1.9    1.5    0.81    pi/2-0.2    (3/2+0.2)*pi    0.4   0.3  0.4 ];
+x0 = [ 0.9   1.9    1.9    0.9    pi/2-0.2    (3/2+0.2)*pi    0.4   0.3  0.4 ];
+% options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
+%                     1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
+
+options  = optimset('Display', 'iter', 'MaxIter', 1e20);
+
 
 solution = fmincon(obj,x0,[],[],[],[],lb,ub,nl_con,options);
 
@@ -87,4 +91,17 @@ t3 = round(solution(9),2);
 %% Building trajectory
 
 build_trajectory;
-plot_data;
+
+%% Write trajectory to file
+py = y';
+pz = z';
+roll = phi';
+vy = yd';
+vz = zd';
+rolld = phid';
+
+ref_X = [py pz roll vy vz rolld];
+ref_U = [u1' u2'];
+%% 
+dlmwrite('saved_data/measX.csv',ref_X);
+dlmwrite('saved_data/simU.csv',ref_U);

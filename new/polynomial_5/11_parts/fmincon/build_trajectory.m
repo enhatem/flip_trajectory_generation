@@ -180,15 +180,15 @@ traj11_phi = traj11_phi(:,2:end); % removes the common point between the 2 conse
 T = 0:t_step:t1+t2+t3+t4+t5+t6+t7+t8+t9+t10+t11;
 z = [traj1_z(1,:) traj2_z(1,:) traj3_z(1,:) traj4_z(1,:) traj5_z(1,:) traj6_z(1,:) traj7_z(1,:) traj8_z(1,:) traj9_z(1,:) traj10_z(1,:) traj11_z(1,:)];
 phi = [traj1_phi(1,:) traj2_phi(1,:) traj3_phi(1,:) traj4_phi(1,:) traj5_phi(1,:) traj6_phi(1,:) traj7_phi(1,:) traj8_phi(1,:) traj9_phi(1,:)  traj10_phi(1,:) traj11_phi(1,:)];
-figure, plot(T,z, 'LineWidth',1.5)
-title('Trajectory along z(t)')
-xlabel('time[s]')
-ylabel('z[m]')
-
-figure, plot(T,phi, 'LineWidth',1.5)
-title('Trajectory along \phi(t)')
-xlabel('time[s]')
-ylabel('\phi[rad]')
+% figure, plot(T,z, 'LineWidth',1.5)
+% title('Trajectory along z(t)')
+% xlabel('time[s]')
+% ylabel('z[m]')
+% 
+% figure, plot(T,phi, 'LineWidth',1.5)
+% title('Trajectory along \phi(t)')
+% xlabel('time[s]')
+% ylabel('\phi[rad]')
 
 %% Calculating the thrust u1 along the trajectory
 

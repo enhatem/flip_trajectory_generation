@@ -240,6 +240,7 @@ function J = objective_function(x)
     
     % An option could be to add the integral of phi^2
     % J = trapz(T,y)^2 + trapz(T,z)^2 + trapz(T,phi)^2 + 50*trapz(T,u1)^2;
+    % J = trapz(T,y)^2 - trapz(T,z)^2 + 50*trapz(T,u1)^2 + t1 + t2 + t3 + t4 +t5 + t6 + t7 + t8 + t9 + t10 + t11;
     J = trapz(T,y)^2 + trapz(T,z)^2 + trapz(T,u1)^2;
     % J = trapz(T,u1)^2;
 end

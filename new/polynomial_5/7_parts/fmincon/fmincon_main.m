@@ -2,7 +2,7 @@ clear; close all; clc;
 
 %% Drone parameters and costants
 
-global g t_step z1_min z2_min z3_min z1_max z2_max z3_max zd_min zd_max zdd_min zdd_max m Ixx l u1_max u2_max
+global g t_step z1_min z2_min z3_min z1_max z2_max z3_max zd_min zd_max zdd_min zdd_max m Ixx l u1_max u2_max w_min w_max
 
 % Drone parameters
 m =  29e-3 / 2; % mass
@@ -16,15 +16,19 @@ g = 9.81; % m/s^2
 %% Constaints on z that are applied on the optimization problem
 % Bounds on the z trajectory of the reaching phase
 z1_min = 0.8;
-z1_max = 2;
+z1_max = 3;
 
 % Bounds on the z trajectory of the flipping phase
 z2_min = 0.8;
-z2_max = 2;
+z2_max = 3;
 
 % Bounds on the z trajectory of the recovery phase
 z3_min = 0.8;
-z3_max = 2;
+z3_max = 3;
+
+% Bounds on angular rates
+% w_min = - 4*pi;
+% w_max =   4*pi;
 
 %% Constraints on the Thrust and Torques that are applied on the opitmization problem
 % Maximum thrust and torque reachable by the drone
@@ -109,14 +113,14 @@ obj = @objective_function;
 
 % Initial condition
 % For z
-z1 = 1.2; % initial position
-z2 = 1.4; % z at the end of the first trajectory (reaching phase)
-z3 = 1.6; % z at the end of the second trajectory (reaching phase)
-z4 = 1.8; % z at the end of the third trajectory (end of reaching phase, beginning of flip phase)
-z5 = 1.2; % z at the end of the fourth trajectory (end of flip phase)
-z6 = 1.1; % z at the end of the fifth trajectory (recovery phase)
+z1 = 0.81; % initial position
+z2 = 1.2; % z at the end of the first trajectory (reaching phase)
+z3 = 1.4; % z at the end of the second trajectory (reaching phase)
+z4 = 1.6; % z at the end of the third trajectory (end of reaching phase, beginning of flip phase)
+z5 = 1.4; % z at the end of the fourth trajectory (end of flip phase)
+z6 = 1.2; % z at the end of the fifth trajectory (recovery phase)
 z7 = 1.0; % z at the end of the sixth trajectory (recovery phase)
-z8 = 0.8; % z at the end of the seventh trajectory (recovery phase)
+z8 = 0.81; % z at the end of the seventh trajectory (recovery phase)
 
 % Velocities along z
 z2d = 1 ; % Velocity of the first waypoint in the reaching phase
@@ -213,7 +217,7 @@ t7      = round(x(37),2);
 %% Building trajectory
 build_trajectory;
 %visualize_trajectory;
-
+% get_angular_rates;
 %% Write trajectory to file
 
 py = y';

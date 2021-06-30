@@ -78,7 +78,7 @@ figure, plot(T1,traj1_phi(1,:),'LineWidth',1.5), hold on
 plot(T2,traj2_phi(1,:),'LineWidth',1.5), hold on
 plot(T3,traj3_phi(1,:),'LineWidth',1.5), hold off
 
-title('Trajectory of z(t) with Polynomials of degree 5')
+title('Trajectory of phi(t) with Polynomials of degree 5')
 xlabel('time [s]')
 ylabel('phi[rad]')
 
@@ -92,6 +92,8 @@ traj3_phi = traj3_phi(:,2:end); % removes the common point between the 2 consecu
 
 z = [traj1_z(1,:) traj2_z(1,:) traj3_z(1,:)];
 phi = [traj1_phi(1,:) traj2_phi(1,:) traj3_phi(1,:)];
+phid = [traj1_phi(2,:) traj2_phi(2,:) traj3_phi(2,:)];
+phidd = [traj1_phi(3,:) traj2_phi(3,:) traj3_phi(3,:)];
 
 T = 0:t_step:t1+t2+t3;
 
@@ -102,10 +104,13 @@ T = 0:t_step:t1+t2+t3;
 %% Calculating the thrust u1 along the trajectory
 
 zdd = [traj1_z(3,:) traj2_z(3,:) traj3_z(3,:)];
+zd = [traj1_z(2,:) traj2_z(2,:) traj3_z(2,:)];
 
 gravity = g*ones(size(z));
 
 u1 = m*(zdd+gravity)./cos(phi);
+
+u2 = phidd * Ixx;
 
 %% Calculating the trajectory along y
 
@@ -127,9 +132,33 @@ title('Trajectory of y(t)')
 xlabel('time[s]')
 ylabel('y[m]')
 
+% Drone parameters for plotting
+r = 0.01;
+l = 0.04;
 
 % Planar trajectory
-figure, plot(y,z,'LineWidth',1.5)
+figure, plot(y,z,'LineWidth',1.5), hold on 
+for i = 1:10:length(y)
+    t = phi(i);
+   
+    q1 = y(i)-l*cos(t);
+    q2 = y(i)+l*cos(t);
+    w1 = z(i)-l*sin(t);
+    w2 = z(i)+l*sin(t);
+   
+    r1y = q1+r*cos(t+pi/2);
+    r1z = w1+r*sin(t+pi/2);
+    r2y = q2+r*cos(t+pi/2);
+    r2z = w2+r*sin(t+pi/2);
+
+    plot([q1 q2],[w1 w2],'k','LineWidth',1.5), hold on
+    plot([q1 r1y],[w1 r1z],'k','LineWidth',1.5), hold on
+    plot([q2 r2y],[w2 r2z],'k','LineWidth',1.5), hold on
+   
+end
+
+hold off
+
 title('Planar trajectory')
 xlabel('y[m]')
 zlabel('z[m]')

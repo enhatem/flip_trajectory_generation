@@ -243,19 +243,19 @@ function [c,ceq] = nonlinear_bounds(x)
     % y = y0 + cumtrapz(T,yd);
     
     % Bounds
-    c = [   z1 - z2;
-            z2 - z3;
-            z3 - z4;
-            z4 - z5;
-            z5 - z6;
-            z7 - z6;
-            z8 - z7;
-            z9 - z8;
+    c = [   z1 -  z2;
+            z2 -  z3;
+            z3 -  z4;
+            z4 -  z5;
+            z5 -  z6;
+            z7 -  z6;
+            z8 -  z7;
+            z9 -  z8;
             z10 - z9;
             z11 - z10;
             z12 - z11;
-            z12 - z1;
-            -min(u1);           % lower bound on u1 (u1>=0)
+            -min(z); 
+            -min(u1);            % lower bound on u1 (u1>=0)
             max(u1)-u1_max ];    % upper bound on u1 (u1<=u1 max)
     
 end

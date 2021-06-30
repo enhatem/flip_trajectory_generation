@@ -16,15 +16,15 @@ g = 9.81; % m/s^2
 %% Constaints on z that are applied on the optimization problem
 % Bounds on the z trajectory of the reaching phase
 z1_min = 0.8;
-z1_max = 2;
+z1_max = 3;
 
 % Bounds on the z trajectory of the flipping phase
 z2_min = 0.8;
-z2_max = 2;
+z2_max = 3;
 
 % Bounds on the z trajectory of the recovery phase
 z3_min = 0.8;
-z3_max = 2;
+z3_max = 3;
 
 %% Constraints on the Thrust and Torques that are applied on the opitmization problem
 % Maximum thrust and torque reachable by the drone
@@ -126,17 +126,17 @@ obj = @objective_function;
 % Initial condition
 % For z
 z1  = 1.0; % Initial position (start of reaching phase)
-z2  = 1.1; % First intermediate waypoint(reaching phase)
-z3  = 1.2; % Second intermediate waypoint(reaching phase)
-z4  = 1.3; % Third intermediate waypoint(reaching phase)
-z5  = 1.4; % Fourth intermediate waypoint(reaching phase)
-z6  = 1.5; % Final position of the recovery phase (start of the flip phase)
-z7  = 1.4; % Final position of the flip phase (start of the recovery phase)
-z8  = 1.3; % First intermediate waypoint(recovery phase)
-z9  = 1.2; % Second intermediate waypoint(recovery phase)
-z10 = 1.1; % Third intermediate waypoint(recovery phase)
+z2  = 1.2; % First intermediate waypoint(reaching phase)
+z3  = 1.4; % Second intermediate waypoint(reaching phase)
+z4  = 1.6; % Third intermediate waypoint(reaching phase)
+z5  = 1.8; % Fourth intermediate waypoint(reaching phase)
+z6  = 2.0; % Final position of the recovery phase (start of the flip phase)
+z7  = 1.8; % Final position of the flip phase (start of the recovery phase)
+z8  = 1.6; % First intermediate waypoint(recovery phase)
+z9  = 1.4; % Second intermediate waypoint(recovery phase)
+z10 = 1.2; % Third intermediate waypoint(recovery phase)
 z11 = 1.0; % Fourth intermediate waypoint(recovery phase)
-z12 = 0.9; % Final position (end of recovery phase)
+z12 = 0.81; % Final position (end of recovery phase)
 
 % Velocities along z
 z2d  = 1; % Velocity of the first waypoint in the reaching phase
@@ -194,18 +194,18 @@ phi10dd = 1; % Angular acceleration of the third waypoint in the recovery phase
 phi11dd = 1; % Angular acceleration of the fourth waypoint in the recovery phase
 
 % For the time for each trajectory
-t1  = 0.5; % time of the first trajectory (reaching phase)
-t2  = 0.5; % time of the second trajectory (reaching phase)
-t3  = 0.5; % time of the third trajectory (reaching phase)
-t4  = 0.5; % time of the fourth trajectory (reaching phase)
-t5  = 0.5; % time of the fifth trajectory (reaching phase)
-t6  = 0.5; % time of the flip trajectory
-t7  = 0.5; % time of the first trajectory (recovery phase)
-t8  = 0.5; % time of the second trajectory (recovery phase)
-t9  = 0.5; % time of the third trajectory (recovery phase)
-t10 = 0.5; % time of the fourth trajectory (recovery phase)
-t11 = 0.5; % time of the fifth trajectory (recovery phase)
-%%
+t1  = 0.3; % time of the first trajectory (reaching phase)
+t2  = 0.3; % time of the second trajectory (reaching phase)
+t3  = 0.3; % time of the third trajectory (reaching phase)
+t4  = 0.3; % time of the fourth trajectory (reaching phase)
+t5  = 0.3; % time of the fifth trajectory (reaching phase)
+t6  = 0.3; % time of the flip trajectory
+t7  = 0.3; % time of the first trajectory (recovery phase)
+t8  = 0.3; % time of the second trajectory (recovery phase)
+t9  = 0.3; % time of the third trajectory (recovery phase)
+t10 = 0.3; % time of the fourth trajectory (recovery phase)
+t11 = 0.3; % time of the fifth trajectory (recovery phase)
+
 x0 = [ z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z2d z3d z4d z5d z8d z9d z10d z11d z2dd z3dd z4dd z5dd z8dd z9dd z10dd z11dd phi2 phi3 phi4 phi5 phi6 phi7 phi8 phi9 phi10 phi11 phi2d phi3d phi4d phi5d phi8d phi9d phi10d phi11d phi2dd phi3dd phi4dd phi5dd phi8dd phi9dd phi10dd phi11dd t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11];
 %options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
 %                    1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
