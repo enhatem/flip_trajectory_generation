@@ -163,6 +163,6 @@ function J = objective_function(x)
     % J  = trapz(T,u1)^2;
     % J = 0.1*trapz(T,y)^2 + 0.1*trapz(T,z)^2 + 150*trapz(T,u1)^2 + (t1 + t2 +t3 +t4 +t5 + t6 + t7);
     % J = 0.1*trapz(T,y)^2 + 0.1*trapz(T,z)^2 + 500*trapz(T,u1)^2;
-    J = trapz(T,y)^2 + trapz(T,z)^2 + 250*trapz(T,u1)^2;
-    % J = trapz(T,u1)^2;
+    % J = trapz(T,y)^2 + trapz(T,z)^2 + 250*trapz(T,u1)^2;
+    J = trapz(T,u1)^2;
 end
