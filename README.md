@@ -1,2 +1,2 @@
 # flip_trajectory_generation
-This repository used MATLAB solvers to that solve an optimization problem to generate feasible and optimal flip trajectories for quadrotors
+This repository uses MATLAB solvers such as fmincon, ga and patternsearch to solve an optimization problem in order to generate feasible and optimal flip trajectories for quadrotors
