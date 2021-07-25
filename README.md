@@ -1,2 +1,2 @@
 # flip_trajectory_generation
-Flip trajectory generator that solves an optimization problem using fmincon in Matlab to generate the optimal trajectory
+This repository used MATLAB solvers to that solve an optimization problem to generate feasible and optimal flip trajectories for quadrotors
