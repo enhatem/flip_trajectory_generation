@@ -1,6 +1,6 @@
 function J = objective_function(x)
     
-    global g t_step m 
+    global g t_step m Ixx
     
     z1      = x(1);
     z2      = x(2);
@@ -133,7 +133,8 @@ function J = objective_function(x)
     % T = 0:t_step:t1+t2+t3+t4+t5+t6+t7;
     z = [traj1_z(1,:) traj2_z(1,:) traj3_z(1,:) traj4_z(1,:) traj5_z(1,:) traj6_z(1,:) traj7_z(1,:)];
     phi = [traj1_phi(1,:) traj2_phi(1,:) traj3_phi(1,:) traj4_phi(1,:) traj5_phi(1,:) traj6_phi(1,:) traj7_phi(1,:)];
-    
+    phidd = [traj1_phi(3,:) traj2_phi(3,:) traj3_phi(3,:) traj4_phi(3,:) traj5_phi(3,:) traj6_phi(3,:) traj7_phi(3,:)];
+
     %% Calculating the thrust u1 along the trajectory
 
     zdd = [traj1_z(3,:) traj2_z(3,:) traj3_z(3,:) traj4_z(3,:) traj5_z(3,:) traj6_z(3,:) traj7_z(3,:)];
@@ -141,6 +142,7 @@ function J = objective_function(x)
     gravity = g*ones(size(z));
 
     u1 = m*(zdd+gravity)./cos(phi);
+    u2 = Ixx * phidd;
     T = linspace(0,t1+t2+t3+t4+t5+t6+t7,length(z));
     %% Calculating the trajectory along y
 
@@ -164,5 +166,5 @@ function J = objective_function(x)
     % J = 0.1*trapz(T,y)^2 + 0.1*trapz(T,z)^2 + 150*trapz(T,u1)^2 + (t1 + t2 +t3 +t4 +t5 + t6 + t7);
     % J = 0.1*trapz(T,y)^2 + 0.1*trapz(T,z)^2 + 500*trapz(T,u1)^2;
     % J = trapz(T,y)^2 + trapz(T,z)^2 + 250*trapz(T,u1)^2;
-    J = trapz(T,u1)^2;
+    J = 100*trapz(T,u1)^2 + trapz(T,u2)^2;
 end

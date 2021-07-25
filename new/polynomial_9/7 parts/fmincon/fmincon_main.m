@@ -2,10 +2,10 @@ clear; close all; clc;
 
 %% Drone parameters and costants
 
-global g t_step z1_min z2_min z3_min z1_max z2_max z3_max zd_min zd_max zdd_min zdd_max m Ixx l u1_max u2_max w_min w_max
+global g t_step z1_min z2_min z3_min z1_max z2_max z3_max zd_min zd_max zdd_min zdd_max m Ixx l u1_max u2_min u2_max w_min w_max
 
 % Drone parameters
-m =  29e-3 / 2; % mass
+m =  295e-3 / 2; % mass
 Ixx =  1.657171e-05; % Inertia
 l = 0.046; % arm length
 
@@ -34,6 +34,7 @@ w_max =   4*pi;
 % Maximum thrust and torque reachable by the drone
 u1_max = 0.9 * ( ( 46e-3 * g ) / 2 ); % Maximum thrust 
 u2_max = 0.1 * ( 1 / 2 * u1_max * l); % Maximum torque
+u2_min = - u2_max;
 
 %% Constraints on phi that are applied on the optimization problem
 
@@ -168,10 +169,17 @@ t7 = 0.3; % time of the seventh trajectory (recovery phase)
 
 x0 = [ z1 z2 z3 z4 z5 z6 z7 z8 z2d z3d z6d z7d z2dd z3dd z6dd z7dd phi2 phi3 phi4 phi5 phi6 phi7 phi2d phi3d phi6d phi7d phi2dd phi3dd phi6dd phi7dd t1 t2 t3 t4 t5 t6 t7];
 %options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
-%                    1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
+%                   1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
+               
+options = optimoptions('fmincon', 'Display','iter', 'Tolx', 1e-20,...
+                    'StepTolerance',1e-50, 'Tolfun',1e-20, ...
+                    'MaxIter', 1e20, 'MaxFunEvals', 1e20);
+% options  = optimoptions('patternsearch','Display', 'iter'); %, 'MaxIter', ...
+                        %1e50, 'MaxFunEvals', 1e50, 'TolMesh',1e-200);
 
-options  = optimset('Display', 'iter', 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
-                
+% patternsearch optimization
+% x = patternsearch(obj,x0,[],[],[],[],lb,ub,nl_con,options);
+
 % fmincon optimization
 x = fmincon(obj,x0,[],[],[],[],lb,ub,nl_con,options);
 

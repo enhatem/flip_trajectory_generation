@@ -2,7 +2,7 @@ function [c,ceq] = nonlinear_bounds(x)
 %nonlinear_bounds extracts the nonlinear bounds that will be used in the
 %optimization problem.
 
-    global g t_step m u1_max w_min w_max
+    global g t_step m u1_max w_min w_max u2_min u2_max Ixx
 
     ceq = []; % no equality constraints
     
@@ -137,6 +137,7 @@ function [c,ceq] = nonlinear_bounds(x)
     T = 0:t_step:t1+t2+t3+t4+t5+t6+t7;
     z = [traj1_z(1,:) traj2_z(1,:) traj3_z(1,:) traj4_z(1,:) traj5_z(1,:) traj6_z(1,:) traj7_z(1,:)];
     phi = [traj1_phi(1,:) traj2_phi(1,:) traj3_phi(1,:) traj4_phi(1,:) traj5_phi(1,:) traj6_phi(1,:) traj7_phi(1,:)];
+    phidd = [traj1_phi(3,:) traj2_phi(3,:) traj3_phi(3,:) traj4_phi(3,:) traj5_phi(3,:) traj6_phi(3,:) traj7_phi(3,:)];
 
     %% Calculating the thrust u1 along the trajectory
 
@@ -145,6 +146,7 @@ function [c,ceq] = nonlinear_bounds(x)
     gravity = g*ones(size(z));
 
     u1 = m*(zdd+gravity)./cos(phi);
+    u2 = Ixx * phidd;
     
     %% Calculating the trajectory along y
 
@@ -218,7 +220,10 @@ function [c,ceq] = nonlinear_bounds(x)
             % max(wx) - w_max;
             % w_min - min(wx);
             -min(u1);           % lower bound on u1 (u1>=0)
-            max(u1)-u1_max ];    % upper bound on u1 (u1<=u1 max)
-    
+            max(u1)-u1_max ;    % upper bound on u1 (u1<=u1 max)
+            u2_min-min(u2);
+            max(u2)-u2_max];
+            
+            
 end
 

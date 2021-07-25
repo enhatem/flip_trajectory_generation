@@ -210,10 +210,17 @@ x0 = [ z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z2d z3d z4d z5d z8d z9d z10d z11d 
 %options  = optimset('Display', 'iter', 'Tolx', 1e-14, 'Tolfun',...
 %                    1e-14, 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
 
-options  = optimset('Display', 'iter', 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
+% options  = optimset('Display', 'iter', 'MaxIter', 1e20, 'MaxFunEvals', 1e20);
                 
 % fmincon optimization
-x = fmincon(obj,x0,[],[],[],[],lb,ub,nl_con,options);
+% x = fmincon(obj,x0,[],[],[],[],lb,ub,nl_con,options);
+
+
+options  = optimoptions('patternsearch','Display', 'iter', 'MaxIter', 1e50, 'MaxFunEvals', 1e50, 'TolMesh',1e-200);
+
+% fmincon optimization
+x = patternsearch(obj,x0,[],[],[],[],lb,ub,nl_con,options);
+% x = fmincon(obj,x0,[],[],[],[],lb,ub,nl_con,options);
 
 % solution of the optimization problem
 z1      = x(1);

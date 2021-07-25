@@ -1,6 +1,7 @@
 function traj = trajectory(start,goal,time)
  
     global t_step;
+    warning("off");
 
     [A,b] = build_matrix(start,goal,time);
     
